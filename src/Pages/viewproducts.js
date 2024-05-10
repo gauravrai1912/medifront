@@ -7,13 +7,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import TextField from '@mui/material/TextField'; // Import TextField for the search bar
+import TextField from '@mui/material/TextField';
 import Footer from '../Components/footer';
 import Navbar from '../Components/navbar';
 
 const columns = [
-  { id: 'productId', label: 'Product ID', minWidth: 100 },
-  { id: 'supplierId', label: 'Supplier ID', minWidth: 100 },
+  { id: 'supplierName', label: 'Supplier Name', minWidth: 170 },
   { id: 'productName', label: 'Product Name', minWidth: 170 },
   { id: 'description', label: 'Description', minWidth: 200 },
   { id: 'category', label: 'Category', minWidth: 120 },
@@ -21,15 +20,23 @@ const columns = [
   { id: 'reorderLevel', label: 'Reorder Level', minWidth: 120 },
 ];
 
-function createData(productId, supplierId, productName, description, category, unitPrice, reorderLevel) {
-  return { productId, supplierId, productName, description, category, unitPrice, reorderLevel };
+function createData(supplierName, productName, description, category, unitPrice, reorderLevel) {
+  return { supplierName, productName, description, category, unitPrice, reorderLevel };
 }
 
 const rows = [
-  createData(1, 101, 'Product A', 'Description of Product A', 'Category A', 10.99, 20),
-  createData(2, 102, 'Product B', 'Description of Product B', 'Category B', 15.99, 15),
-  createData(3, 103, 'Product C', 'Description of Product C', 'Category C', 20.99, 25),
-  // Add more rows as needed
+  createData('Supplier A', 'Product A', 'Description of Product A', 'Category A', 10.99, 20),
+  createData('Supplier B', 'Product B', 'Description of Product B', 'Category B', 15.99, 15),
+  createData('Supplier C', 'Product C', 'Description of Product C', 'Category C', 20.99, 25),
+  createData('Supplier d', 'Product D', 'Description of Product A', 'Category A', 10.99, 20),
+  createData('Supplier e', 'Product E', 'Description of Product A', 'Category A', 10.99, 20),
+  createData('Supplier B', 'Product F', 'Description of Product B', 'Category B', 15.99, 15),
+  createData('Supplier C', 'Product G', 'Description of Product C', 'Category C', 20.99, 25),
+  createData('Supplier A', 'Product H', 'Description of Product A', 'Category A', 10.99, 20),
+  createData('Supplier A', 'Product I', 'Description of Product A', 'Category A', 10.99, 20),
+  createData('Supplier B', 'Product J', 'Description of Product B', 'Category B', 15.99, 15),
+  createData('Supplier C', 'Product K', 'Description of Product C', 'Category C', 20.99, 25),
+  createData('Supplier A', 'Product L', 'Description of Product A', 'Category A', 10.99, 20)
 ];
 
 function StickyHeadTable() {
@@ -90,7 +97,7 @@ function StickyHeadTable() {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
                   return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row.productId}>
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row.productName}>
                       {columns.map((column) => {
                         const value = row[column.id];
                         return (
