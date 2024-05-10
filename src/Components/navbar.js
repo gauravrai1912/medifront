@@ -2,36 +2,50 @@ import React, { useState, useEffect, useRef } from "react";
 import Logo from "../Assets/logo.png";
 import { Link } from 'react-router-dom';
 
+import { useNavigate } from 'react-router-dom';
+ 
 const Navbar = () => {
   const [activeMenu, setActiveMenu] = useState(null);
   const submenuRef = useRef(null);
-
+ 
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (submenuRef.current && !submenuRef.current.contains(event.target)) {
         setActiveMenu(null);
       }
     };
-
+ 
     document.addEventListener("mousedown", handleOutsideClick);
-
+ 
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
-
+ 
   const handleMenuClick = (menuName, event) => {
     event.preventDefault();
     setActiveMenu(activeMenu === menuName ? null : menuName);
   };
 
+  
+  const navigate = useNavigate();
+  function handleClick(event) {
+    console.log();
+    if(event.currentTarget.querySelector('a').innerText=="Home"){
+        navigate('/home');
+    }
+  }
   const renderSubMenu = (menuName, subMenuOptions) => {
     if (activeMenu === menuName) {
       return (
         <div ref={submenuRef} className="absolute bg-gray-800 rounded-md shadow-lg">
           <div className="pt-2 w-48 h-fit">
             {subMenuOptions.map((option, index) => (
-              <Link key={index} to={`/product/${option.toLowerCase().replace(/\s/g, '-')}`} className="block px-4 py-3 text-white hover:bg-gray-700">
+              <Link
+                key={index}
+                to={`/${menuName.toLowerCase()}/${option.toLowerCase().replace(/\s/g, '-')}`}
+                className="block px-4 py-3 text-white hover:bg-gray-700"
+              >
                 {option}
               </Link>
             ))}
@@ -41,7 +55,7 @@ const Navbar = () => {
     }
     return null;
   };
-
+ 
   return (
     <nav className="bg-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -54,14 +68,13 @@ const Navbar = () => {
           </div>
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
-              <div className="relative">
-                <a href="/" className="text-white hover:bg-gray-700 hover:text-white px-4 py-3 rounded-md text-sm font-medium" onClick={(e) => handleMenuClick('home', e)}>
-                  Home
+              <div className="relative" onClick={(e) => handleClick(e)}>
+                <a href="/home" className="text-white hover:bg-gray-700 hover:text-white px-4 py-3 rounded-md text-sm font-medium" onClick={(e) => handleMenuClick('home', e)}>
+                Home
                 </a>
-                
               </div>
               <div className="relative">
-                <a href="/product" className="text-white hover:bg-gray-700 hover:text-white px-4 py-3 rounded-md text-sm font-medium" onClick={(e) => handleMenuClick('product', e)}>
+                <a href="/products" className="text-white hover:bg-gray-700 hover:text-white px-4 py-3 rounded-md text-sm font-medium" onClick={(e) => handleMenuClick('product', e)}>
                   Products
                 </a>
                 {renderSubMenu('product', ['View Products', 'Add Product', 'Edit Product', 'Delete Product'])}
@@ -70,7 +83,7 @@ const Navbar = () => {
                 <a href="/inventory" className="text-white hover:bg-gray-700 hover:text-white px-4 py-3 rounded-md text-sm font-medium" onClick={(e) => handleMenuClick('inventory', e)}>
                   Inventory
                 </a>
-                {renderSubMenu('inventory', ['Check Inventory', 'Add Inventory', 'Update Inventory', 'Delete Inventory'])}
+                {renderSubMenu('inventory', ['View Inventory', 'Add Inventory', 'Update Inventory', 'Delete Inventory'])}
               </div>
               <div className="relative">
                 <a href="/orders" className="text-white hover:bg-gray-700 hover:text-white px-4 py-3 rounded-md text-sm font-medium" onClick={(e) => handleMenuClick('orders', e)}>
@@ -90,6 +103,7 @@ const Navbar = () => {
       </div>
     </nav>
   );
+ 
 };
-
+ 
 export default Navbar;
