@@ -8,8 +8,8 @@ import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
-import Footer from '../Components/footer';
-import Navbar from '../Components/navbar';
+import Footer from '../../Components/footer';
+import Navbar from '../../Components/navbar';
 
 const dummyProducts = [
   { supplierName: 'Supplier A', productName: 'Product A', description: 'Description of Product A', category: 'Category A', unitPrice: 10.99, reorderLevel: 20 },

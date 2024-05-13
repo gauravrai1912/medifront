@@ -8,35 +8,29 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
-import Footer from '../Components/footer';
-import Navbar from '../Components/navbar';
+import Footer from '../../Components/footer';
+import Navbar from '../../Components/navbar';
 
 const columns = [
-  { id: 'supplierName', label: 'Supplier Name', minWidth: 170 },
-  { id: 'productName', label: 'Product Name', minWidth: 170 },
-  { id: 'description', label: 'Description', minWidth: 200 },
-  { id: 'category', label: 'Category', minWidth: 120 },
-  { id: 'unitPrice', label: 'Unit Price', minWidth: 120 },
-  { id: 'reorderLevel', label: 'Reorder Level', minWidth: 120 },
+  { id: 'productName', label: 'Product Name', minWidth: 100 },
+  { id: 'supplierName', label: 'Supplier Name', minWidth: 100 },
+  { id: 'batchNumber', label: 'Batch Number', minWidth: 150 },
+  { id: 'purchaseDate', label: 'Purchase Date', minWidth: 150 },
+  { id: 'manufacturedDate', label: 'Manufactured Date', minWidth: 150 },
+  { id: 'purchasePrice', label: 'Purchase Price', minWidth: 150 },
+  { id: 'quantity', label: 'Quantity', minWidth: 100 },
+  { id: 'expirationDate', label: 'Expiration Date', minWidth: 150 },
 ];
 
-function createData(supplierName, productName, description, category, unitPrice, reorderLevel) {
-  return { supplierName, productName, description, category, unitPrice, reorderLevel };
+function createData(productName, supplierName, batchNumber, purchaseDate, manufacturedDate, purchasePrice, quantity, expirationDate) {
+  return { productName, supplierName, batchNumber, purchaseDate, manufacturedDate, purchasePrice, quantity, expirationDate };
 }
 
-const rows = [
-  createData('Supplier A', 'Product A', 'Description of Product A', 'Category A', 10.99, 20),
-  createData('Supplier B', 'Product B', 'Description of Product B', 'Category B', 15.99, 15),
-  createData('Supplier C', 'Product C', 'Description of Product C', 'Category C', 20.99, 25),
-  createData('Supplier d', 'Product D', 'Description of Product A', 'Category A', 10.99, 20),
-  createData('Supplier e', 'Product E', 'Description of Product A', 'Category A', 10.99, 20),
-  createData('Supplier B', 'Product F', 'Description of Product B', 'Category B', 15.99, 15),
-  createData('Supplier C', 'Product G', 'Description of Product C', 'Category C', 20.99, 25),
-  createData('Supplier A', 'Product H', 'Description of Product A', 'Category A', 10.99, 20),
-  createData('Supplier A', 'Product I', 'Description of Product A', 'Category A', 10.99, 20),
-  createData('Supplier B', 'Product J', 'Description of Product B', 'Category B', 15.99, 15),
-  createData('Supplier C', 'Product K', 'Description of Product C', 'Category C', 20.99, 25),
-  createData('Supplier A', 'Product L', 'Description of Product A', 'Category A', 10.99, 20)
+const dummyRows = [
+  createData('Product A', 'Supplier A', 'B001', '2023-05-10', '2023-05-01', 10.99, 20, '2024-05-01'),
+  createData('Product B', 'Supplier B',  'B002','2023-05-15', '2023-05-05', 15.99, 15, '2024-05-15'),
+  createData('Product C', 'Supplier C', 'B003', '2023-05-20', '2023-05-10', 20.99, 25, '2024-05-20'),
+  // Add more dummy data as needed
 ];
 
 function StickyHeadTable() {
@@ -57,16 +51,16 @@ function StickyHeadTable() {
     setSearchTerm(event.target.value);
   };
 
-  const filteredRows = searchTerm ? rows.filter(row => row.productName.toLowerCase().includes(searchTerm.toLowerCase())) : rows;
+  const filteredRows = searchTerm ? dummyRows.filter(row => row.productId.toString().includes(searchTerm.toLowerCase())) : dummyRows;
 
   return (
     <div>
       <Navbar />
       <div ClassName="">
-          <Paper sx={{ width: '30em', marginBottom: '16px', paddingRight: '16px', alignItems: 'center', margin: 'auto' }}>
+        <Paper sx={{ width: '30em', marginBottom: '16px', paddingRight: '16px', alignItems: 'center', margin: 'auto' }}>
           <TextField
             id="search"
-            label="Search by Product Name"
+            label="Search by Product ID"
             variant="outlined"
             fullWidth
             value={searchTerm}
@@ -74,9 +68,8 @@ function StickyHeadTable() {
             style={{ margin: '8px' }}
           />
         </Paper>
-
       </div>
-      <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '16px'}}>
+      <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '16px' }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table>
             <TableHead>
@@ -84,7 +77,7 @@ function StickyHeadTable() {
                 {columns.map((column) => (
                   <TableCell
                     key={column.id}
-                    align={column.align}
+                    align="center"
                     style={{ minWidth: column.minWidth }}
                   >
                     {column.label}
@@ -97,11 +90,11 @@ function StickyHeadTable() {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
                   return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row.productName}>
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row.productId}>
                       {columns.map((column) => {
                         const value = row[column.id];
                         return (
-                          <TableCell key={column.id} align={column.align}>
+                          <TableCell key={column.id} align="center">
                             {column.format && typeof value === 'number'
                               ? column.format(value)
                               : value}

@@ -2,8 +2,8 @@ import * as React from 'react';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Footer from '../Components/footer';
-import Navbar from '../Components/navbar';
+import Footer from '../../Components/footer';
+import Navbar from '../../Components/navbar';
 
 function AddProduct() {
   const [supplierName, setSupplierName] = React.useState('');

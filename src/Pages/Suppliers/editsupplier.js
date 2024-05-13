@@ -10,18 +10,18 @@ import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
-import Footer from '../Components/footer';
-import Navbar from '../Components/navbar';
+import Footer from '../../Components/footer';
+import Navbar from '../../Components/navbar';
 
-const dummyProducts = [
-    { supplierName: 'Supplier A', productName: 'Product A', description: 'Description of Product A', category: 'Category A', unitPrice: 10.99, reorderLevel: 20 },
-    { supplierName: 'Supplier B', productName: 'Product B', description: 'Description of Product B', category: 'Category B', unitPrice: 15.99, reorderLevel: 25 },
-    { supplierName: 'Supplier C', productName: 'Product C', description: 'Description of Product C', category: 'Category C', unitPrice: 20.99, reorderLevel: 30 }
+const dummySuppliers = [
+    { supplierName: 'Supplier A', contactNumber: '1234567890', email: 'supplierA@example.com', address: 'Address of Supplier A' },
+    { supplierName: 'Supplier B', contactNumber: '0987654321', email: 'supplierB@example.com', address: 'Address of Supplier B' },
+    { supplierName: 'Supplier C', contactNumber: '9876543210', email: 'supplierC@example.com', address: 'Address of Supplier C' }
 ];
 
-function EditProduct() {
+function EditSupplier() {
     const [searchText, setSearchText] = React.useState('');
-    const [selectedProduct, setSelectedProduct] = React.useState(null);
+    const [selectedSupplier, setSelectedSupplier] = React.useState(null);
     const [showEditFields, setShowEditFields] = React.useState(false);
     const [message, setMessage] = React.useState('');
 
@@ -30,29 +30,28 @@ function EditProduct() {
         setMessage('');
     };
 
-    const handleSearchProduct = () => {
+    const handleSearchSupplier = () => {
         const trimmedSearchText = searchText.trim(); // Trim extra spaces
-        const foundProduct = dummyProducts.find(product => product.productName.toLowerCase() === trimmedSearchText.toLowerCase());
-        if (foundProduct) {
-          setSelectedProduct(foundProduct);
+        const foundSupplier = dummySuppliers.find(supplier => supplier.supplierName.toLowerCase() === trimmedSearchText.toLowerCase());
+        if (foundSupplier) {
+          setSelectedSupplier(foundSupplier);
           setShowEditFields(false);
           setMessage('');
         } else {
-          setMessage('Product not found');
+          setMessage('Supplier not found');
         }
-      };
-      
+    };
 
     const handleToggleEditFields = () => {
         setShowEditFields(!showEditFields);
     };
 
-    const handleEditProduct = () => {
-        // Logic to edit product (e.g., send API request to backend)
-        console.log('Editing product:', selectedProduct);
-        setMessage('Product Edited Successfully');
-        // Reset selectedProduct after editing
-        setSelectedProduct(null);
+    const handleEditSupplier = () => {
+        // Logic to edit supplier (e.g., send API request to backend)
+        console.log('Editing supplier:', selectedSupplier);
+        setMessage('Supplier Edited Successfully');
+        // Reset selectedSupplier after editing
+        setSelectedSupplier(null);
         // Hide the edit fields after saving changes
         setShowEditFields(false);
     };
@@ -61,36 +60,36 @@ function EditProduct() {
         <div>
             <Navbar />
             <Paper sx={{ width: '50%', padding: '20px', margin: '20px auto' }}>
-                <h2>Edit Product</h2>
+                <h2>Edit Supplier</h2>
                 <TextField
-                    label="Search Product"
+                    label="Search Supplier"
                     variant="outlined"
                     fullWidth
                     value={searchText}
                     onChange={handleSearchChange}
                     margin="normal"
                 />
-                <Button variant="contained" color="primary" onClick={() => { setSelectedProduct(null); handleSearchProduct(); }} style={{ marginLeft: '10px' }}>
+                <Button variant="contained" color="primary" onClick={() => { setSelectedSupplier(null); handleSearchSupplier(); }} style={{ marginLeft: '10px' }}>
                     Search
                 </Button>
-                {message === 'Product Edited Successfully' && <Typography color="success">{message}</Typography>}
-                {selectedProduct && (
+                {message === 'Supplier Edited Successfully' && <Typography color="success">{message}</Typography>}
+                {selectedSupplier && (
                     <div>
                         <FormControlLabel
                             control={<Checkbox checked={showEditFields} onChange={handleToggleEditFields} />}
-                            label="Edit Product"
+                            label="Edit Supplier"
                         />
                         <TableContainer>
                             <Table>
                                 <TableBody>
-                                    {Object.entries(selectedProduct).map(([key, value]) => (
+                                    {Object.entries(selectedSupplier).map(([key, value]) => (
                                         <TableRow key={key}>
                                             <TableCell>{key}</TableCell>
                                             <TableCell>
                                                 {showEditFields ? (
                                                     <TextField
                                                         value={value}
-                                                        onChange={(event) => setSelectedProduct({ ...selectedProduct, [key]: event.target.value })}
+                                                        onChange={(event) => setSelectedSupplier({ ...selectedSupplier, [key]: event.target.value })}
                                                         fullWidth
                                                     />
                                                 ) : (
@@ -104,18 +103,18 @@ function EditProduct() {
                         </TableContainer>
                         {showEditFields && (
                             <div>
-                                <Button variant="contained" color="primary" onClick={handleEditProduct} style={{ marginTop: '20px' }}>
-                                    Edit Product
+                                <Button variant="contained" color="primary" onClick={handleEditSupplier} style={{ marginTop: '20px' }}>
+                                    Edit Supplier
                                 </Button>
                             </div>
                         )}
                     </div>
                 )}
-                {message === 'Product not found' && <Typography color="error">{message}</Typography>}
+                {message === 'Supplier not found' && <Typography color="error">{message}</Typography>}
             </Paper>
             <Footer />
         </div>
     );
 }
 
-export default EditProduct;
+export default EditSupplier;
