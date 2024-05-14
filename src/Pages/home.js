@@ -32,7 +32,7 @@ function Home() {
     );
 
     return (
-        <div>
+        <div className="flex flex-col min-h-screen">
             <Navbar />
             <div className="flex justify-center">
                 <div className="w-3/4">

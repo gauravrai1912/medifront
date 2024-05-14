@@ -40,13 +40,13 @@ const Navbar = () => {
   const renderSubMenu = (menuName, subMenuOptions) => {
     if (activeMenu === menuName) {
       return (
-        <div ref={submenuRef} className="absolute bg-gray-800 rounded-md shadow-lg">
+        <div ref={submenuRef} className="absolute bg-gray-700 rounded-md shadow-lg">
           <div className="pt-2 w-48 h-fit">
             {subMenuOptions.map((option, index) => (
               <Link
                 key={index}
                 to={`/${menuName.toLowerCase()}/${option.toLowerCase().replace(/\s/g, '-')}`}
-                className="block px-4 py-3 text-white hover:bg-gray-700"
+                className="block px-4 py-3 text-white hover:bg-gray-800"
               >
                 {option}
               </Link>

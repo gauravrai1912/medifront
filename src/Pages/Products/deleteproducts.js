@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -8,19 +8,19 @@ import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
-
-const dummyProducts = [
-  { supplierName: 'Supplier A', productName: 'Product A', description: 'Description of Product A', category: 'Category A', unitPrice: 10.99, reorderLevel: 20 },
-  { supplierName: 'Supplier B', productName: 'Product B', description: 'Description of Product B', category: 'Category B', unitPrice: 15.99, reorderLevel: 25 },
-  { supplierName: 'Supplier C', productName: 'Product C', description: 'Description of Product C', category: 'Category C', unitPrice: 20.99, reorderLevel: 30 }
-];
+import axios from 'axios'; 
 
 function DeleteProduct() {
   const [searchText, setSearchText] = React.useState('');
   const [selectedProduct, setSelectedProduct] = React.useState(null);
   const [message, setMessage] = React.useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState('');
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
@@ -28,30 +28,45 @@ function DeleteProduct() {
     setMessage('');
   };
 
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   const handleSearchProduct = () => {
-    const foundProduct = dummyProducts.find(product => product.productName.toLowerCase() === searchText.toLowerCase());
-    if (foundProduct) {
-      setSelectedProduct(foundProduct);
-      setMessage('');
-    } else {
-      setMessage('Product not found');
-    }
+    axios.get(`http://localhost:8090/products/getproductbyname?name=${searchText}`)
+      .then(response => {
+        setSelectedProduct(response.data);
+        setMessage('');
+      })
+      .catch(error => {
+        console.error('Error searching product:', error);
+        setMessage('Product not found');
+      });
   };
 
   const handleDeleteProduct = () => {
     if (selectedProduct) {
-      setMessage('Product deleted');
-      // Logic to delete product (e.g., send API request to backend)
-      const updatedProducts = dummyProducts.filter(product => product !== selectedProduct);
-      dummyProducts.splice(0, dummyProducts.length, ...updatedProducts);
-      setSelectedProduct(null);
+      axios.delete(`http://localhost:8090/products/deleteproduct?name=${selectedProduct.productName}`)
+        .then(response => {
+          console.log('Product deleted:', response.data);
+          setSnackbarSeverity('success');
+          setSnackbarMessage('Product Deleted Successfully');
+          setSnackbarOpen(true);
+          setSelectedProduct(null);
+        })
+        .catch(error => {
+          console.error('Error deleting product:', error);
+          setSnackbarSeverity('error');
+          setSnackbarMessage('Error deleting product');
+          setSnackbarOpen(true);
+        });
     } else {
       setMessage('No product selected');
     }
   };
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Navbar />
       <Paper sx={{ width: '50%', padding: '20px', margin: '20px auto' }}>
         <h2>Delete Product</h2>
@@ -88,6 +103,16 @@ function DeleteProduct() {
         )}
       </Paper>
       <Footer />
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

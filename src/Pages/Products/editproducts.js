@@ -1,10 +1,12 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import TableContainer from '@mui/material/TableContainer';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
@@ -12,18 +14,17 @@ import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
-
-const dummyProducts = [
-    { supplierName: 'Supplier A', productName: 'Product A', description: 'Description of Product A', category: 'Category A', unitPrice: 10.99, reorderLevel: 20 },
-    { supplierName: 'Supplier B', productName: 'Product B', description: 'Description of Product B', category: 'Category B', unitPrice: 15.99, reorderLevel: 25 },
-    { supplierName: 'Supplier C', productName: 'Product C', description: 'Description of Product C', category: 'Category C', unitPrice: 20.99, reorderLevel: 30 }
-];
+import axios from 'axios';
 
 function EditProduct() {
     const [searchText, setSearchText] = React.useState('');
     const [selectedProduct, setSelectedProduct] = React.useState(null);
     const [showEditFields, setShowEditFields] = React.useState(false);
     const [message, setMessage] = React.useState('');
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarSeverity, setSnackbarSeverity] = useState('');
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+  
 
     const handleSearchChange = (event) => {
         setSearchText(event.target.value);
@@ -31,34 +32,69 @@ function EditProduct() {
     };
 
     const handleSearchProduct = () => {
-        const trimmedSearchText = searchText.trim(); // Trim extra spaces
-        const foundProduct = dummyProducts.find(product => product.productName.toLowerCase() === trimmedSearchText.toLowerCase());
-        if (foundProduct) {
-          setSelectedProduct(foundProduct);
-          setShowEditFields(false);
-          setMessage('');
-        } else {
-          setMessage('Product not found');
-        }
-      };
-      
+        const trimmedSearchText = searchText.trim();
+        axios.get(`http://localhost:8090/products/getproductbyname?name=${trimmedSearchText}`)
+            .then(response => {
+                const foundProduct = response.data;
+                if (foundProduct) {
+                    setSelectedProduct(foundProduct);
+                    setShowEditFields(false);
+                    setMessage('');
+                } else {
+                    setMessage('Product not found');
+                }
+            })
+            .catch(error => {
+                console.error('Error searching product:', error);
+                setMessage('Error searching product');
+            });
+    };
+    
 
     const handleToggleEditFields = () => {
         setShowEditFields(!showEditFields);
     };
 
-    const handleEditProduct = () => {
-        // Logic to edit product (e.g., send API request to backend)
-        console.log('Editing product:', selectedProduct);
-        setMessage('Product Edited Successfully');
-        // Reset selectedProduct after editing
-        setSelectedProduct(null);
-        // Hide the edit fields after saving changes
-        setShowEditFields(false);
-    };
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+      };
 
+    const handleEditProduct = () => {
+        // Prepare the data to send to the backend API
+        const editedProductData = {
+            supplierName: selectedProduct.supplierName,
+            productName: selectedProduct.productName,
+            description: selectedProduct.description,
+            category: selectedProduct.category,
+            unitPrice: selectedProduct.unitPrice,
+            reorderLevel: selectedProduct.reorderLevel,
+        };
+    
+        // Send the data to the backend API using Axios
+        axios.put(`http://localhost:8090/products/updateproduct?name=${selectedProduct.productName}`, editedProductData)
+            .then(response => {
+                // Handle successful response from the backend
+                console.log('Product edited successfully:', response.data);
+                setSnackbarSeverity('success');
+                setSnackbarMessage('Product Edited Successfully');
+                 setSnackbarOpen(true);
+                // Reset selectedProduct after editing
+                setSelectedProduct(null);
+                // Hide the edit fields after saving changes
+                setShowEditFields(false);
+            })
+            .catch(error => {
+                // Handle error response from the backend
+                console.error('Error editing product:', error);
+                setSnackbarSeverity('error');
+                setSnackbarMessage('Error editing product');
+                setSnackbarOpen(true);
+            });
+    };
+    
+    
     return (
-        <div>
+        <div className="flex flex-col min-h-screen">
             <Navbar />
             <Paper sx={{ width: '50%', padding: '20px', margin: '20px auto' }}>
                 <h2>Edit Product</h2>
@@ -114,6 +150,16 @@ function EditProduct() {
                 {message === 'Product not found' && <Typography color="error">{message}</Typography>}
             </Paper>
             <Footer />
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
         </div>
     );
 }

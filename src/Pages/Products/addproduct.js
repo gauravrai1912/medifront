@@ -1,17 +1,23 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
+import axios from 'axios';
 
 function AddProduct() {
-  const [supplierName, setSupplierName] = React.useState('');
-  const [productName, setProductName] = React.useState('');
-  const [description, setDescription] = React.useState('');
-  const [category, setCategory] = React.useState('');
-  const [unitPrice, setUnitPrice] = React.useState('');
-  const [reorderLevel, setReorderLevel] = React.useState('');
+  const [supplierName, setSupplierName] = useState('');
+  const [productName, setProductName] = useState('');
+  const [description, setDescription] = useState('');
+  const [category, setCategory] = useState('');
+  const [unitPrice, setUnitPrice] = useState('');
+  const [reorderLevel, setReorderLevel] = useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState('');
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const handleSupplierNameChange = (event) => {
     setSupplierName(event.target.value);
@@ -37,16 +43,42 @@ function AddProduct() {
     setReorderLevel(event.target.value);
   };
 
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   const handleAddProduct = () => {
-    // Logic to add product (e.g., send API request to backend)
-    console.log('Adding product:', { supplierName, productName, description, category, unitPrice, reorderLevel });
-    // Reset form fields after adding product
-    setSupplierName('');
-    setProductName('');
-    setDescription('');
-    setCategory('');
-    setUnitPrice('');
-    setReorderLevel('');
+    const productData = {
+      supplierName,
+      productName,
+      description,
+      category,
+      unitPrice: parseFloat(unitPrice),
+      reorderLevel: parseInt(reorderLevel)
+    };
+
+    axios.post('http://localhost:8090/products', productData)
+      .then(response => {
+        console.log('Product added successfully:', response.data);
+        // Reset form fields after adding product
+        setSupplierName('');
+        setProductName('');
+        setDescription('');
+        setCategory('');
+        setUnitPrice('');
+        setReorderLevel('');
+        // Show success snackbar
+        setSnackbarSeverity('success');
+        setSnackbarMessage('Product Added Successfully');
+        setSnackbarOpen(true);
+      })
+      .catch(error => {
+        console.error('Error adding product:', error);
+        // Show error snackbar
+        setSnackbarSeverity('error');
+        setSnackbarMessage('Error adding product');
+        setSnackbarOpen(true);
+      });
   };
 
   return (
@@ -109,6 +141,16 @@ function AddProduct() {
         </Button>
       </Paper>
       <Footer />
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
