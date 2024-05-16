@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faUserEdit, faLock } from '@fortawesome/free-solid-svg-icons';
+import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [showProfileOptions, setShowProfileOptions] = useState(false);
   const [employeeName, setEmployeeName] = useState('');
   const [employeeId, setEmployeeId] = useState('');
   const profileRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Simulate fetching employee information from the database
@@ -43,8 +46,18 @@ const Profile = () => {
   };
 
   const handleSignOut = () => {
-    // Perform sign out logic (e.g., clear session, redirect to login page)
-    window.location.href = '/login';
+    Cookies.remove('jwt_token');
+    navigate('/login');
+  };
+
+  const handleEditProfile = () => {
+    // Navigate to the edit profile page
+    navigate('/edit-profile');
+  };
+
+  const handleUpdatePassword = () => {
+    // Navigate to the update password page
+    navigate('/update-password');
   };
 
   return (
@@ -58,6 +71,14 @@ const Profile = () => {
             <p className="mb-1">{employeeName}</p>
             <p className="text-xs text-gray-400">{employeeId}</p>
           </div>
+          <button className="block w-full text-left px-4 py-2 text-white hover:bg-gray-700" onClick={handleEditProfile}>
+            <FontAwesomeIcon icon={faUserEdit} className="mr-2" />
+            Edit Profile
+          </button>
+          <button className="block w-full text-left px-4 py-2 text-white hover:bg-gray-700" onClick={handleUpdatePassword}>
+            <FontAwesomeIcon icon={faLock} className="mr-2" />
+            Update Password
+          </button>
           <button className="block w-full text-left px-4 py-2 text-white bg-red-600 hover:bg-red-700" onClick={handleSignOut}>Sign Out</button>
         </div>
       )}

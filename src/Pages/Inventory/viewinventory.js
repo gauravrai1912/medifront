@@ -51,7 +51,8 @@ function StickyHeadTable() {
     setSearchTerm(event.target.value);
   };
 
-  const filteredRows = searchTerm ? dummyRows.filter(row => row.productId.toString().includes(searchTerm.toLowerCase())) : dummyRows;
+  const filteredRows = searchTerm ? dummyRows.filter(row => row.productName.toLowerCase().includes(searchTerm.toLowerCase())) : dummyRows;
+
 
   return (
     <div>

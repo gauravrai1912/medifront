@@ -46,6 +46,7 @@ function DeleteProduct() {
 
   const handleDeleteProduct = () => {
     if (selectedProduct) {
+      // Send a DELETE request to delete the selected product
       axios.delete(`http://localhost:8090/products/deleteproduct?name=${selectedProduct.productName}`)
         .then(response => {
           console.log('Product deleted:', response.data);
@@ -66,7 +67,7 @@ function DeleteProduct() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div>
       <Navbar />
       <Paper sx={{ width: '50%', padding: '20px', margin: '20px auto' }}>
         <h2>Delete Product</h2>

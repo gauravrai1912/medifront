@@ -1,15 +1,21 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
+import axios from 'axios'; 
 
 function AddSupplier() {
-  const [supplierName, setSupplierName] = React.useState('');
-  const [contactNumber, setContactNumber] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [address, setAddress] = React.useState('');
+  const [supplierName, setSupplierName] = useState('');
+  const [contactNumber, setContactNumber] = useState('');
+  const [email, setEmail] = useState('');
+  const [address, setAddress] = useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState('');
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const handleSupplierNameChange = (event) => {
     setSupplierName(event.target.value);
@@ -27,14 +33,41 @@ function AddSupplier() {
     setAddress(event.target.value);
   };
 
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   const handleAddSupplier = () => {
-    // Logic to add supplier (e.g., send API request to backend)
-    console.log('Adding supplier:', { supplierName, contactNumber, email, address });
-    // Reset form fields after adding supplier
-    setSupplierName('');
-    setContactNumber('');
-    setEmail('');
-    setAddress('');
+    // Check if all fields are filled
+    if (!supplierName || !contactNumber || !email || !address) {
+      setSnackbarSeverity('error');
+      setSnackbarMessage('Please fill in all fields');
+      setSnackbarOpen(true);
+      return;
+    }
+
+    axios.post('http://localhost:8090/suppliers', {
+      supplierName,
+      contactNumber,
+      email,
+      address
+    })
+    .then(response => {
+      console.log('Supplier added successfully:', response.data);
+      setSupplierName('');
+      setContactNumber('');
+      setEmail('');
+      setAddress('');
+      setSnackbarSeverity('success');
+      setSnackbarMessage('Supplier Added Successfully');
+      setSnackbarOpen(true);
+    })
+    .catch(error => {
+      console.error('Error adding supplier:', error);
+      setSnackbarSeverity('error');
+      setSnackbarMessage('Error adding product');
+      setSnackbarOpen(true);
+    });
   };
 
   return (
@@ -79,6 +112,17 @@ function AddSupplier() {
         </Button>
       </Paper>
       <Footer />
+      
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

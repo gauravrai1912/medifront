@@ -10,6 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
+import axios from 'axios';
 
 const columns = [
   { id: 'supplierName', label: 'Supplier Name', minWidth: 170 },
@@ -25,10 +26,15 @@ const ViewSupplierPage = () => {
   const [suppliers, setSuppliers] = useState([]);
 
   useEffect(() => {
-    // Fetch suppliers from backend here and set the state
-    // Example:
-    // fetchSuppliers().then((data) => setSuppliers(data));
-  }, []); // Empty dependency array means it runs only once after the component mounts
+    axios.get('http://localhost:8090/suppliers/getallsuppliers')
+      .then(response => {
+        setSuppliers(response.data); 
+      })
+      .catch(error => {
+        console.error('Error fetching suppliers:', error);
+        
+      });
+  }, []);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -10,20 +10,21 @@ import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
-
-const dummySuppliers = [
-    { supplierName: 'Supplier A', contactNumber: '1234567890', email: 'supplierA@example.com', address: 'Address of Supplier A' },
-    { supplierName: 'Supplier B', contactNumber: '0987654321', email: 'supplierB@example.com', address: 'Address of Supplier B' },
-    { supplierName: 'Supplier C', contactNumber: '9876543210', email: 'supplierC@example.com', address: 'Address of Supplier C' }
-];
+import axios from 'axios'; // Import axios for making HTTP requests
 
 function EditSupplier() {
     const [searchText, setSearchText] = React.useState('');
     const [selectedSupplier, setSelectedSupplier] = React.useState(null);
     const [showEditFields, setShowEditFields] = React.useState(false);
     const [message, setMessage] = React.useState('');
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarSeverity, setSnackbarSeverity] = useState('');
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+  
 
     const handleSearchChange = (event) => {
         setSearchText(event.target.value);
@@ -32,29 +33,49 @@ function EditSupplier() {
 
     const handleSearchSupplier = () => {
         const trimmedSearchText = searchText.trim(); // Trim extra spaces
-        const foundSupplier = dummySuppliers.find(supplier => supplier.supplierName.toLowerCase() === trimmedSearchText.toLowerCase());
-        if (foundSupplier) {
-          setSelectedSupplier(foundSupplier);
-          setShowEditFields(false);
-          setMessage('');
-        } else {
-          setMessage('Supplier not found');
-        }
+        // Replace the below block with actual API call to search for a supplier
+        axios.get(`http://localhost:8090/suppliers/getsupplierbyname?name=${trimmedSearchText}`)
+            .then(response => {
+                setSelectedSupplier(response.data);
+                setShowEditFields(false);
+                setMessage('');
+            })
+            .catch(error => {
+                console.error('Error searching supplier:', error);
+                setMessage('Supplier not found');
+            });
     };
 
     const handleToggleEditFields = () => {
         setShowEditFields(!showEditFields);
     };
 
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+      };
+
     const handleEditSupplier = () => {
-        // Logic to edit supplier (e.g., send API request to backend)
-        console.log('Editing supplier:', selectedSupplier);
-        setMessage('Supplier Edited Successfully');
-        // Reset selectedSupplier after editing
-        setSelectedSupplier(null);
-        // Hide the edit fields after saving changes
-        setShowEditFields(false);
+        axios.put(`http://localhost:8090/suppliers/updatesupplier?name=${selectedSupplier.supplierName}`, selectedSupplier)
+            .then(response => {
+                console.log('Editing supplier:', response.data);
+                setMessage('Supplier Edited Successfully');
+                setSnackbarSeverity('success');
+                setSnackbarMessage('Supplier Details Edited Successfully');
+                setSnackbarOpen(true);
+                // Reset selectedSupplier after editing
+                setSelectedSupplier(null);
+                // Hide the edit fields after saving changes
+                setShowEditFields(false);
+            })
+            .catch(error => {
+                console.error('Error editing supplier:', error);
+                setMessage('Error editing supplier');
+                setSnackbarSeverity('error');
+                setSnackbarMessage('Error editing supplier');
+                setSnackbarOpen(true);
+            });
     };
+    
 
     return (
         <div>
@@ -69,7 +90,7 @@ function EditSupplier() {
                     onChange={handleSearchChange}
                     margin="normal"
                 />
-                <Button variant="contained" color="primary" onClick={() => { setSelectedSupplier(null); handleSearchSupplier(); }} style={{ marginLeft: '10px' }}>
+                <Button variant="contained" color="primary" onClick={handleSearchSupplier} style={{ marginLeft: '10px' }}>
                     Search
                 </Button>
                 {message === 'Supplier Edited Successfully' && <Typography color="success">{message}</Typography>}
@@ -113,6 +134,16 @@ function EditSupplier() {
                 {message === 'Supplier not found' && <Typography color="error">{message}</Typography>}
             </Paper>
             <Footer />
+            <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
         </div>
     );
 }
