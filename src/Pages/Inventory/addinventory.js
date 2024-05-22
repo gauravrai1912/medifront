@@ -1,82 +1,66 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
+import axios from 'axios';
 
 function AddInventory() {
-  const [productId, setProductId] = React.useState('');
-  const [supplierId, setSupplierId] = React.useState('');
-  const [batchNumber, setBatchNumber] = React.useState('');
-  const [purchaseDate, setPurchaseDate] = React.useState('');
-  const [manufacturedDate, setManufacturedDate] = React.useState('');
-  const [purchasePrice, setPurchasePrice] = React.useState('');
-  const [quantity, setQuantity] = React.useState('');
-  const [expirationDate, setExpirationDate] = React.useState('');
-  const [errorMessage, setErrorMessage] = React.useState('');
-  const [successMessage, setSuccessMessage] = React.useState('');
+  const [productName, setProductName] = useState('');
+  const [supplierName, setSupplierName] = useState('');
+  const [batchNumber, setBatchNumber] = useState('');
+  const [purchaseDate, setPurchaseDate] = useState('');
+  const [manufacturedDate, setManufacturedDate] = useState('');
+  const [purchasePrice, setPurchasePrice] = useState('');
+  const [quantity, setQuantity] = useState('');
+  const [expirationDate, setExpirationDate] = useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState('');
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
-  const handleProductIdChange = (event) => {
-    setProductId(event.target.value);
-  };
-
-  const handleSupplierIdChange = (event) => {
-    setSupplierId(event.target.value);
-  };
-
-  const handleBatchNumberChange = (event) => {
-    setBatchNumber(event.target.value);
-  };
-
-  const handlePurchaseDateChange = (event) => {
-    setPurchaseDate(event.target.value);
-  };
-
-  const handleManufacturedDateChange = (event) => {
-    setManufacturedDate(event.target.value);
-  };
-
-  const handlePurchasePriceChange = (event) => {
-    setPurchasePrice(event.target.value);
-  };
-
-  const handleQuantityChange = (event) => {
-    setQuantity(event.target.value);
-  };
-
-  const handleExpirationDateChange = (event) => {
-    setExpirationDate(event.target.value);
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
   };
 
   const handleAddInventory = () => {
-    if (
-      !productId ||
-      !supplierId ||
-      !batchNumber ||
-      !purchaseDate ||
-      !manufacturedDate ||
-      !purchasePrice ||
-      !quantity ||
-      !expirationDate
-    ) {
-      setErrorMessage('Please fill in all fields');
-      setSuccessMessage('');
-    } else {
-      setErrorMessage('');
-      // Logic to add inventory (e.g., send API request to backend)
-      console.log('Adding inventory:', { productId, supplierId, batchNumber, purchaseDate, manufacturedDate, purchasePrice, quantity, expirationDate });
-      setSuccessMessage('Product added to inventory successfully');
-      // Reset form fields after adding inventory
-      setProductId('');
-      setSupplierId('');
-      setBatchNumber('');
-      setPurchaseDate('');
-      setManufacturedDate('');
-      setPurchasePrice('');
-      setQuantity('');
-      setExpirationDate('');
-    }
+    const inventoryData = {
+      productName,
+      supplierName,
+      batchNumber,
+      purchaseDate,
+      manufacturedDate,
+      purchasePrice: parseFloat(purchasePrice),
+      quantity: parseInt(quantity),
+      expirationDate,
+    };
+
+    axios.post('http://localhost:8090/inventory', inventoryData)
+      .then(response => {
+        console.log('Inventory added successfully:', response.data);
+        // Reset form fields after adding inventory
+        setProductName('');
+        setSupplierName('');
+        setBatchNumber('');
+        setPurchaseDate('');
+        setManufacturedDate('');
+        setPurchasePrice('');
+        setQuantity('');
+        setExpirationDate('');
+        // Show success snackbar
+        setSnackbarSeverity('success');
+        setSnackbarMessage('Inventory Added Successfully');
+        setSnackbarOpen(true);
+      })
+      .catch(error => {
+        console.error('Error adding inventory:', error);
+        // Show error snackbar
+        setSnackbarSeverity('error');
+        setSnackbarMessage('Error adding inventory');
+        setSnackbarOpen(true);
+      });
   };
 
   return (
@@ -88,16 +72,16 @@ function AddInventory() {
           label="Product Name"
           variant="outlined"
           fullWidth
-          value={productId}
-          onChange={handleProductIdChange}
+          value={productName}
+          onChange={(e) => setProductName(e.target.value)}
           margin="normal"
         />
         <TextField
           label="Supplier Name"
           variant="outlined"
           fullWidth
-          value={supplierId}
-          onChange={handleSupplierIdChange}
+          value={supplierName}
+          onChange={(e) => setSupplierName(e.target.value)}
           margin="normal"
         />
         <TextField
@@ -105,7 +89,7 @@ function AddInventory() {
           variant="outlined"
           fullWidth
           value={batchNumber}
-          onChange={handleBatchNumberChange}
+          onChange={(e) => setBatchNumber(e.target.value)}
           margin="normal"
         />
         <TextField
@@ -114,7 +98,7 @@ function AddInventory() {
           fullWidth
           type="date"
           value={purchaseDate}
-          onChange={handlePurchaseDateChange}
+          onChange={(e) => setPurchaseDate(e.target.value)}
           margin="normal"
           InputLabelProps={{
             shrink: true,
@@ -126,7 +110,7 @@ function AddInventory() {
           fullWidth
           type="date"
           value={manufacturedDate}
-          onChange={handleManufacturedDateChange}
+          onChange={(e) => setManufacturedDate(e.target.value)}
           margin="normal"
           InputLabelProps={{
             shrink: true,
@@ -138,7 +122,7 @@ function AddInventory() {
           fullWidth
           type="number"
           value={purchasePrice}
-          onChange={handlePurchasePriceChange}
+          onChange={(e) => setPurchasePrice(e.target.value)}
           margin="normal"
         />
         <TextField
@@ -147,7 +131,7 @@ function AddInventory() {
           fullWidth
           type="number"
           value={quantity}
-          onChange={handleQuantityChange}
+          onChange={(e) => setQuantity(e.target.value)}
           margin="normal"
         />
         <TextField
@@ -156,19 +140,27 @@ function AddInventory() {
           fullWidth
           type="date"
           value={expirationDate}
-          onChange={handleExpirationDateChange}
+          onChange={(e) => setExpirationDate(e.target.value)}
           margin="normal"
           InputLabelProps={{
             shrink: true,
           }}
         />
-        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-        {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
         <Button variant="contained" color="primary" onClick={handleAddInventory} style={{ marginTop: '20px' }}>
           Add Inventory
         </Button>
       </Paper>
       <Footer />
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

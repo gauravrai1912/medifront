@@ -7,7 +7,7 @@ function ForgotPasswordDialog() {
   const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [otpValues, setOTPValues] = useState(Array(6).fill(""));
-  const [timer, setTimer] = useState(60);
+  const [timer, setTimer] = useState(10);
   const [showResend, setShowResend] = useState(false);
   
 
@@ -68,11 +68,11 @@ function ForgotPasswordDialog() {
     return () => clearInterval(interval);
   }, [timer]);
 
-  const handleResendClick = () => {
-    setTimer(60);
-    setShowResend(false);
-    setOTPValues(Array(6).fill(""));
-  };
+  // const handleResendClick = () => {
+  //   setTimer(60);
+  //   setShowResend(false);
+  //   setOTPValues(Array(6).fill(""));
+  // };
 
   const handleInputChange = (index, value) => {
     if (value === "" || (value >= "0" && value <= "9")) {
@@ -154,7 +154,7 @@ function ForgotPasswordDialog() {
                 <button
                   id="resend"
                   className="text-black px-6 py-2 rounded-md mt-4"
-                  onClick={handleResendClick}
+                  onClick={handleChange}
                 >
                   Resend
                 </button>

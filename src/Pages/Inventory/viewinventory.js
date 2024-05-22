@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -22,21 +23,24 @@ const columns = [
   { id: 'expirationDate', label: 'Expiration Date', minWidth: 150 },
 ];
 
-function createData(productName, supplierName, batchNumber, purchaseDate, manufacturedDate, purchasePrice, quantity, expirationDate) {
-  return { productName, supplierName, batchNumber, purchaseDate, manufacturedDate, purchasePrice, quantity, expirationDate };
-}
-
-const dummyRows = [
-  createData('Product A', 'Supplier A', 'B001', '2023-05-10', '2023-05-01', 10.99, 20, '2024-05-01'),
-  createData('Product B', 'Supplier B',  'B002','2023-05-15', '2023-05-05', 15.99, 15, '2024-05-15'),
-  createData('Product C', 'Supplier C', 'B003', '2023-05-20', '2023-05-10', 20.99, 25, '2024-05-20'),
-  // Add more dummy data as needed
-];
-
 function StickyHeadTable() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const [rows, setRows] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8090/inventory'); // Replace with your API endpoint
+        setRows(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -51,17 +55,18 @@ function StickyHeadTable() {
     setSearchTerm(event.target.value);
   };
 
-  const filteredRows = searchTerm ? dummyRows.filter(row => row.productName.toLowerCase().includes(searchTerm.toLowerCase())) : dummyRows;
-
+  const filteredRows = searchTerm
+    ? rows.filter(row => row.productName.toLowerCase().includes(searchTerm.toLowerCase()))
+    : rows;
 
   return (
     <div>
       <Navbar />
-      <div ClassName="">
+      <div className="">
         <Paper sx={{ width: '30em', marginBottom: '16px', paddingRight: '16px', alignItems: 'center', margin: 'auto' }}>
           <TextField
             id="search"
-            label="Search by Product ID"
+            label="Search by Product Name"
             variant="outlined"
             fullWidth
             value={searchTerm}
@@ -89,22 +94,20 @@ function StickyHeadTable() {
             <TableBody>
               {filteredRows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
-                  return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row.productId}>
-                      {columns.map((column) => {
-                        const value = row[column.id];
-                        return (
-                          <TableCell key={column.id} align="center">
-                            {column.format && typeof value === 'number'
-                              ? column.format(value)
-                              : value}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                  );
-                })}
+                .map((row) => (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}> {/* Assuming each row has a unique 'id' */}
+                    {columns.map((column) => {
+                      const value = row[column.id];
+                      return (
+                        <TableCell key={column.id} align="center">
+                          {column.format && typeof value === 'number'
+                            ? column.format(value)
+                            : value}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>

@@ -122,7 +122,7 @@ function StickyHeadTable() {
         />
       </Paper>
       </div>
-      <Footer />
+      
     </div>
   );
 }

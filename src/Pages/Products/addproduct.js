@@ -82,7 +82,7 @@ function AddProduct() {
   };
 
   return (
-    <div>
+    <div className='z-30'>
       <Navbar />
       <Paper sx={{ width: '50%', padding: '20px', margin: '20px auto' }}>
         <h2>Add New Product</h2>

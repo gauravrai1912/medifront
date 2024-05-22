@@ -40,7 +40,7 @@ const Navbar = () => {
   const renderSubMenu = (menuName, subMenuOptions) => {
     if (activeMenu === menuName) {
       return (
-        <div ref={submenuRef} className="absolute bg-gray-700 rounded-md shadow-lg">
+        <div ref={submenuRef} className="absolute z-50 bg-gray-700 rounded-md shadow-lg">
           <div className="pt-2 w-48 h-fit">
             {subMenuOptions.map((option, index) => (
               <Link
@@ -59,11 +59,11 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-gray-800">
+    <nav className="bg-gray-800 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center  h-16">
           <div className="flex items-center">
-            <a href="/" className="flex-shrink-0 flex items-center">
+            <a href="/home" className="flex-shrink-0 flex items-center">
               <img src={Logo} alt="Logo" className="h-12 mr-2" />
               {/* <span className="text-white font-bold text-lg">Medical Inventory</span> */}
             </a>
@@ -71,7 +71,7 @@ const Navbar = () => {
           <div className="md:block ml-auto">
             <div className="ml-4 flex md:ml-6">
               <div className="relative" onClick={(e) => handleClick(e)}>
-                <a href="/" className="text-white hover:bg-gray-700 hover:text-white px-4 py-3 rounded-md text-sm font-medium" >
+                <a href="/home" className="text-white hover:bg-gray-700 hover:text-white px-4 py-3 rounded-md text-sm font-medium" >
                   Home
                 </a>
               </div>

@@ -39,9 +39,11 @@ const EditProfile = () => {
     const handleSaveProfile = async () => {
         try {
             const token = Cookies.get('jwt_token');
-            const email = jwtDecode(token).email;
-    
-            await axios.put(`/api/user/updateProfile?email=${email}`, { phoneNumber, firstName, lastName });
+            const decodedToken = jwtDecode(token);
+            const email = decodedToken.sub;
+            console.log(email);
+            console.log(phoneNumber, firstName, lastName);
+            await axios.put(`http://localhost:8090/api/v1/auth/updateProfile?email=${email}`, { phoneNumber, firstName, lastName });
             alert('Profile updated successfully!');
         } catch (error) {
             console.error('Error updating user profile:', error);
