@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import Typography from '@mui/material/Typography';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
 import axios from 'axios';
@@ -36,14 +36,11 @@ function EditOrderDetails() {
     try {
       const response = await axios.get(`http://localhost:8090/order-details/getDetails?orderId=${orderId}&productName=${productName}`);
       const foundProduct = response.data;
-      console.log(foundProduct);
       if (foundProduct) {
         setEditableData(foundProduct);
         setMessage('');
       } else {
-        setSnackbarSeverity('error');
-        setSnackbarMessage('Error searching order');
-        setSnackbarOpen(true);
+        setMessage('Order not found');
         setEditableData(null);
       }
     } catch (error) {
@@ -58,24 +55,19 @@ function EditOrderDetails() {
 
   const handleEditInventory = async () => {
     try {
-      await axios.put('http://localhost:8090/order-details', {
-        orderId: editableData.orderId,
-        productName: editableData.productName,
-        quantityOrdered: editableData.quantityOrdered,
-        totalPrice: editableData.totalPrice
-      });
+      await axios.put(`http://localhost:8090/inventory?productName=${editableData.productName}&batchNo=${editableData.batchNumber}`, editableData);
       setSnackbarSeverity('success');
-          setSnackbarMessage('Order Edited Successfully');
-          setSnackbarOpen(true);
+      setSnackbarMessage('Product Added Successfully');
+      setSnackbarOpen(true);
       // Clear editableData after editing
       setEditableData(null);
     } catch (error) {
       setSnackbarSeverity('error');
-      setSnackbarMessage('Error editing Order Details');
+      setSnackbarMessage('Error adding product');
       setSnackbarOpen(true);
     }
   };
-  
+
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
@@ -109,9 +101,7 @@ function EditOrderDetails() {
               variant="outlined"
               fullWidth
               value={editableData.productName || ''}
-              InputProps={{
-                readOnly: true,
-              }}
+              onChange={(event) => handleInputChange(event, 'productName')}
               margin="normal"
             />
             <TextField
@@ -130,7 +120,54 @@ function EditOrderDetails() {
               onChange={(event) => handleInputChange(event, 'totalPrice')}
               margin="normal"
             />
-            {/* Add other fields here */}
+            <TextField
+              label="Batch Number"
+              variant="outlined"
+              fullWidth
+              value={editableData.batchNumber || ''}
+              onChange={(event) => handleInputChange(event, 'batchNumber')}
+              margin="normal"
+            />
+            <TextField
+              label="Supplier Name"
+              variant="outlined"
+              fullWidth
+              value={editableData.supplierName || ''}
+              onChange={(event) => handleInputChange(event, 'supplierName')}
+              margin="normal"
+            />
+            <TextField
+              label="Purchase Date"
+              variant="outlined"
+              fullWidth
+              value={editableData.purchaseDate || ''}
+              onChange={(event) => handleInputChange(event, 'purchaseDate')}
+              margin="normal"
+            />
+            <TextField
+              label="Manufactured Date"
+              variant="outlined"
+              fullWidth
+              value={editableData.manufacturedDate || ''}
+              onChange={(event) => handleInputChange(event, 'manufacturedDate')}
+              margin="normal"
+            />
+            <TextField
+              label="Purchase Price"
+              variant="outlined"
+              fullWidth
+              value={editableData.purchasePrice || ''}
+              onChange={(event) => handleInputChange(event, 'purchasePrice')}
+              margin="normal"
+            />
+            <TextField
+              label="Expiration Date"
+              variant="outlined"
+              fullWidth
+              value={editableData.expirationDate || ''}
+              onChange={(event) => handleInputChange(event, 'expirationDate')}
+              margin="normal"
+            />
             <Button variant="contained" color="primary" onClick={handleEditInventory} style={{ marginTop: '20px' }}>
               Edit Inventory
             </Button>

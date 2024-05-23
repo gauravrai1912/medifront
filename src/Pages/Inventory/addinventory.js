@@ -114,7 +114,7 @@ function AddInventory() {
           margin="normal"
           InputLabelProps={{
             shrink: true,
-          }}
+          }}    
         />
         <TextField
           label="Purchase Price"

@@ -5,26 +5,37 @@ import Button from '@mui/material/Button';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
 function CreateOrders() {
   const [orderId, setOrderId] = React.useState('');
   const [orderDate, setOrderDate] = React.useState('');
   const [pharmacistId, setPharmacistId] = React.useState('');
-  const [supplierId, setSupplierId] = React.useState('');
+  const [supplierName, setSupplierId] = React.useState('');
 
   const navigate = useNavigate();
 
-  const handleProceed = () => {
+  const handleProceed = async () => {
     // Check if all fields are entered properly
-    if (orderId && orderDate && pharmacistId && supplierId) {
-      // Navigate to Order Details page if all fields are entered
-      navigate('/orders/order-details');
+    if (orderId && orderDate && pharmacistId && supplierName) {
+      try {
+        // Make API call to save the order
+        const order = { orderId, orderDate, pharmacistId, supplierName };
+        await axios.post('http://localhost:8090/orders', order);
+        
+        // Navigate to Order Details page if the order is successfully saved
+        navigate('/orders/order-details', { state: { orderId } });
+      } catch (error) {
+        console.error("There was an error saving the order!", error);
+        alert("Failed to save order. Please try again.");
+      }
     } else {
       // Display an error message or handle incomplete fields as per your requirement
       alert("Please fill in all fields before proceeding.");
     }
   };
+
 
   return (
     <div>
@@ -61,7 +72,7 @@ function CreateOrders() {
           label="Supplier ID"
           variant="outlined"
           fullWidth
-          value={supplierId}
+          value={supplierName}
           onChange={(e) => setSupplierId(e.target.value)}
           margin="normal"
         />

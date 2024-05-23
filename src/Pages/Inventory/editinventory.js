@@ -1,8 +1,10 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
 import axios from 'axios';
@@ -12,6 +14,9 @@ function EditInventory() {
     const [searchBatchNo, setSearchBatchNo] = React.useState('');
     const [editableData, setEditableData] = React.useState(null);
     const [message, setMessage] = React.useState('');
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarSeverity, setSnackbarSeverity] = useState('');
+    const [snackbarMessage, setSnackbarMessage] = useState('');
 
     const handleSearchChange = (event) => {
         setSearchProductName(event.target.value);
@@ -22,6 +27,10 @@ function EditInventory() {
         setSearchBatchNo(event.target.value);
         setMessage('');
     };
+
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+      };
 
     const handleSearchInventory = () => {
         const trimmedProductName = searchProductName.trim();
@@ -52,14 +61,15 @@ function EditInventory() {
     const handleEditInventory = () => {
         axios.put(`http://localhost:8090/inventory?productName=${editableData.productName}&batchNo=${editableData.batchNumber}`, editableData)
             .then(response => {
-                console.log('Inventory edited successfully:', response.data);
-                setMessage('Inventory Edited Successfully');
-                // Clear editableData after editing
+                setSnackbarSeverity('success');
+                setSnackbarMessage('Inventory Edited Successfully');
+                 setSnackbarOpen(true);
                 setEditableData(null);
             })
             .catch(error => {
-                console.error('Error editing inventory:', error);
-                setMessage('Error editing inventory');
+                setSnackbarSeverity('error');
+                setSnackbarMessage('Error editing Inventory');
+                setSnackbarOpen(true);
             });
     };
 
@@ -162,6 +172,17 @@ function EditInventory() {
                 )}
             </Paper>
             <Footer />
+            <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
+    
         </div>
     );
 }

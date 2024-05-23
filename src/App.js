@@ -15,7 +15,7 @@ import AddSupplier from './Pages/Suppliers/addsupplier';
 import EditSupplier from './Pages/Suppliers/editsupplier';
 import DeleteSupplier from './Pages/Suppliers/deletesupplier';
 import CreateOrders from './Pages/Orders/createorder';
-import OrderDetails from './Pages/Orders/orderdetails';
+
 import ViewOrderDetails from './Pages/Orders/vieworders';
 import EditOrderDetails from './Pages/Orders/editorderdetails';
 import ViewInventory from './Pages/Inventory/viewinventory';
@@ -24,6 +24,8 @@ import EditInventory from './Pages/Inventory/editinventory';
 import DeleteInventory from './Pages/Inventory/deleteinventory';
 import EditProfile from './Pages/editprofile';
 import UpdatePassword from './Pages/updatepassword';
+import OrderDetails from './Pages/Orders/createOrderDetails';
+import DeleteOrder from './Pages/Orders/deleteorder';
 
 
 function App() {
@@ -46,7 +48,7 @@ function App() {
           <Route path='/suppliers/edit-supplier' element={<EditSupplier/>}/>
           <Route path='/suppliers/delete-supplier' element={<DeleteSupplier/>}/>
           <Route path='/orders/create-order' element={<CreateOrders/>}/>
-          <Route path='/orders/order-details' element={<OrderDetails/>}/>
+           
           <Route path='/orders/view-orders' element={<ViewOrderDetails/>}/>
           <Route path='/orders/edit-order' element={<EditOrderDetails/>}/>
           <Route path='/inventory/check-inventory' element={<ViewInventory/>}/>
@@ -55,6 +57,8 @@ function App() {
           <Route path='/inventory/delete-inventory' element={<DeleteInventory/>}/>
           <Route path='/edit-profile' element={<EditProfile/>}/>
           <Route path='/update-password' element={<UpdatePassword/>}/>
+          <Route path='/orders/order-details' element={<OrderDetails/>}/>
+          <Route path='/orders/delete-order' element={<DeleteOrder/>}/>
 
         </Routes>
 

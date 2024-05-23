@@ -8,7 +8,6 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
-import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
 import axios from 'axios';
 

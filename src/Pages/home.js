@@ -1,31 +1,47 @@
-import React from "react";
-import Navbar from "../Components/navbar";
-import Footer from "../Components/footer";
+import React, { useEffect, useState } from 'react';
+import Navbar from '../Components/navbar';
+import Footer from '../Components/footer';
+import axios from 'axios';
 
 function Home() {
-    // Sample data for demonstration
-    const inventoryData = {
-        totalProducts: 1500,
-        nearlyEmpty: 50,
-        nearingExpiration: 20
-    };
+    const [inventoryData, setInventoryData] = useState({
+        totalUniqueProducts: 0,
+        productsBelowQuantity: 0,
+        productsExpiringWithinAWeek: 0
+    });
+    const [message, setMessage] = useState('');
+
+    useEffect(() => {
+        const fetchInventoryData = async () => {
+            try {
+                const response = await axios.get('http://localhost:8090/inventory/summary');
+                setInventoryData(response.data);
+                setMessage('');
+            } catch (error) {
+                console.error('Error fetching inventory data:', error);
+                setMessage('Error fetching inventory data');
+            }
+        };
+
+        fetchInventoryData();
+    }, []);
 
     // Component to render the inventory summary card
-    const InventorySummaryCard = ({ totalProducts, nearlyEmpty, nearingExpiration }) => (
+    const InventorySummaryCard = ({ totalUniqueProducts, productsBelowQuantity, productsExpiringWithinAWeek }) => (
         <div className="bg-white rounded-md shadow-md p-4 mb-4">
             <h2 className="text-lg font-bold mb-2">Inventory Summary</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="border border-gray-200 rounded-md p-4">
-                    <h3 className="text-xl font-semibold mb-2">Total Products</h3>
-                    <p className="text-3xl font-bold">{totalProducts}</p>
+                    <h3 className="text-xl font-semibold mb-2">Total Unique Products</h3>
+                    <p className="text-3xl font-bold">{totalUniqueProducts}</p>
                 </div>
                 <div className="border border-gray-200 rounded-md p-4">
-                    <h3 className="text-xl font-semibold mb-2">Nearly Empty</h3>
-                    <p className="text-3xl font-bold">{nearlyEmpty}</p>
+                    <h3 className="text-xl font-semibold mb-2">Products Below Quantity (100)</h3>
+                    <p className="text-3xl font-bold">{productsBelowQuantity}</p>
                 </div>
                 <div className="border border-gray-200 rounded-md p-4">
-                    <h3 className="text-xl font-semibold mb-2">Nearing Expiration</h3>
-                    <p className="text-3xl font-bold">{nearingExpiration}</p>
+                    <h3 className="text-xl font-semibold mb-2">Products Expiring Within a Week</h3>
+                    <p className="text-3xl font-bold">{productsExpiringWithinAWeek}</p>
                 </div>
             </div>
         </div>
@@ -46,6 +62,7 @@ function Home() {
                     <p className="text-lg mb-4">
                         Use the navigation menu on the left to access different sections of the system, including inventory management, orders, reports, and more. If you have any questions or need assistance, feel free to reach out to our support team.
                     </p>
+                    {message && <p className="text-red-500">{message}</p>}
                     {/* Include the Inventory Summary Card */}
                     <InventorySummaryCard {...inventoryData} />
                 </div>
