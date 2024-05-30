@@ -48,7 +48,7 @@ function App() {
           <Route path='/suppliers/edit-supplier' element={<EditSupplier/>}/>
           <Route path='/suppliers/delete-supplier' element={<DeleteSupplier/>}/>
           <Route path='/orders/create-order' element={<CreateOrders/>}/>
-          <Route path='/orders/create-order-details' element={<CreateOrderDetails/>}/>
+          <Route path='/orders/order-details' element={<CreateOrderDetails/>}/>
           <Route path='/orders/view-orders' element={<ViewOrderDetails/>}/>
           <Route path='/orders/edit-order' element={<EditOrderDetails/>}/>
           <Route path='/inventory/check-inventory' element={<ViewInventory/>}/>
