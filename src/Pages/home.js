@@ -14,7 +14,7 @@ function Home() {
     useEffect(() => {
         const fetchInventoryData = async () => {
             try {
-                const response = await axios.get('http://localhost:8090/inventory/summary');
+                const response = await axios.get('http://52.66.201.221:8090/inventory/summary');
                 setInventoryData(response.data);
                 setMessage('');
             } catch (error) {

@@ -25,7 +25,7 @@ const UpdatePassword = () => {
             const token = Cookies.get('jwt_token');
             const decodedToken = jwtDecode(token);
             const email = decodedToken.sub;
-            const response = await axios.post('http://localhost:8090/api/v1/auth/changePassword', { email, password, newPassword });
+            const response = await axios.post('http://52.66.201.221:8090/api/v1/auth/changePassword', { email, password, newPassword });
             if (response.status === 200) {
                 alert('Password updated successfully.');
                 navigate('/home');

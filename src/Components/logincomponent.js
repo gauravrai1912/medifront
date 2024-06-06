@@ -13,7 +13,7 @@ function Login() {
     const password = document.getElementById('password').value;
 
     // Assuming you use axios for making API calls
-    axios.post('http://localhost:8090/api/v1/auth/login', { email, password })
+    axios.post('http://52.66.201.221:8090/api/v1/auth/login', { email, password })
       .then(response => {
         const { statusCode, responseMessage, token } = response.data;
         if (statusCode === 200) {

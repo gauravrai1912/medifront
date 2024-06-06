@@ -33,7 +33,7 @@ function DeleteProduct() {
   };
 
   const handleSearchProduct = () => {
-    axios.get(`http://localhost:8090/products/getproductbyname?name=${searchText}`)
+    axios.get(`http://52.66.201.221:8090/products/getproductbyname?name=${searchText}`)
       .then(response => {
         setSelectedProduct(response.data);
         setMessage('');
@@ -47,7 +47,7 @@ function DeleteProduct() {
   const handleDeleteProduct = () => {
     if (selectedProduct) {
       // Send a DELETE request to delete the selected product
-      axios.delete(`http://localhost:8090/products/deleteproduct?name=${selectedProduct.productName}`)
+      axios.delete(`http://52.66.201.221:8090/products/deleteproduct?name=${selectedProduct.productName}`)
         .then(response => {
           console.log('Product deleted:', response.data);
           setSnackbarSeverity('success');

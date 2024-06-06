@@ -36,7 +36,7 @@ function EditInventory() {
         const trimmedProductName = searchProductName.trim();
         const trimmedBatchNo = searchBatchNo.trim();
         console.log('Searching inventory with:', { trimmedProductName, trimmedBatchNo }); // Debugging log
-        axios.get(`http://localhost:8090/inventory?productName=${trimmedProductName}&batchNo=${trimmedBatchNo}`)
+        axios.get(`http://52.66.201.221:8090/inventory?productName=${trimmedProductName}&batchNo=${trimmedBatchNo}`)
             .then(response => {
                 const foundInventory = response.data;
                 console.log('Search results:', foundInventory); // Debugging log
@@ -59,7 +59,7 @@ function EditInventory() {
     };
 
     const handleEditInventory = () => {
-        axios.put(`http://localhost:8090/inventory?productName=${editableData.productName}&batchNo=${editableData.batchNumber}`, editableData)
+        axios.put(`http://52.66.201.221:8090/inventory?productName=${editableData.productName}&batchNo=${editableData.batchNumber}`, editableData)
             .then(response => {
                 setSnackbarSeverity('success');
                 setSnackbarMessage('Inventory Edited Successfully');

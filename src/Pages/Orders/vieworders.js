@@ -20,7 +20,7 @@ function ViewOrderDetails() {
   const handleSearchOrder = async () => {
     if (orderId) {
       try {
-        const response = await axios.get(`http://localhost:8090/order-details/${orderId}`);
+        const response = await axios.get(`http://52.66.201.221:8090/order-details/${orderId}`);
         setOrderDetails(response.data);
         console.log('Order details:', response.data);
         setErrorMessage('');

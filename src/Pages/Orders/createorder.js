@@ -22,7 +22,7 @@ function CreateOrders() {
       try {
         // Make API call to save the order
         const order = { orderId, orderDate, pharmacistId, supplierName };
-        await axios.post('http://localhost:8090/orders', order);
+        await axios.post('http://52.66.201.221:8090/orders', order);
         
         // Navigate to Order Details page if the order is successfully saved
         navigate('/orders/order-details', { state: { orderId } });

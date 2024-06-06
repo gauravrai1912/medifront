@@ -33,7 +33,7 @@ function EditProduct() {
 
     const handleSearchProduct = () => {
         const trimmedSearchText = searchText.trim();
-        axios.get(`http://localhost:8090/products/getproductbyname?name=${trimmedSearchText}`)
+        axios.get(`http://52.66.201.221:8090/products/getproductbyname?name=${trimmedSearchText}`)
             .then(response => {
                 const foundProduct = response.data;
                 if (foundProduct) {
@@ -71,7 +71,7 @@ function EditProduct() {
         };
     
         // Send the data to the backend API using Axios
-        axios.put(`http://localhost:8090/products/updateproduct?name=${selectedProduct.productName}`, editedProductData)
+        axios.put(`http://52.66.201.221:8090/products/updateproduct?name=${selectedProduct.productName}`, editedProductData)
             .then(response => {
                 // Handle successful response from the backend
                 console.log('Product edited successfully:', response.data);

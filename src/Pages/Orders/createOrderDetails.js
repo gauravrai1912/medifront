@@ -35,7 +35,7 @@ function CreateOrderDetails() {
     if (orderId && productName && quantityOrdered && totalPrice) {
       try {
         const orderDetails = { orderId, productName, quantityOrdered, totalPrice };
-        await axios.post('http://localhost:8090/order-details', orderDetails);
+        await axios.post('http://52.66.201.221:8090/order-details', orderDetails);
         
         setSnackbarSeverity('success');
         setSnackbarMessage('Order Details Added Successfully');

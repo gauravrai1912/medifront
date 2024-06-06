@@ -34,7 +34,7 @@ function EditSupplier() {
     const handleSearchSupplier = () => {
         const trimmedSearchText = searchText.trim(); // Trim extra spaces
         // Replace the below block with actual API call to search for a supplier
-        axios.get(`http://localhost:8090/suppliers/getsupplierbyname?name=${trimmedSearchText}`)
+        axios.get(`http://52.66.201.221:8090/suppliers/getsupplierbyname?name=${trimmedSearchText}`)
             .then(response => {
                 setSelectedSupplier(response.data);
                 setShowEditFields(false);
@@ -55,7 +55,7 @@ function EditSupplier() {
       };
 
     const handleEditSupplier = () => {
-        axios.put(`http://localhost:8090/suppliers/updatesupplier?name=${selectedSupplier.supplierName}`, selectedSupplier)
+        axios.put(`http://52.66.201.221:8090/suppliers/updatesupplier?name=${selectedSupplier.supplierName}`, selectedSupplier)
             .then(response => {
                 console.log('Editing supplier:', response.data);
                 setMessage('Supplier Edited Successfully');

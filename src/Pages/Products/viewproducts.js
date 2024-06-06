@@ -32,7 +32,7 @@ function StickyHeadTable() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8090/products/getallproducts'); // Replace '/api/products' with your actual API endpoint
+      const response = await axios.get('http://52.66.201.221:8090/products/getallproducts'); // Replace '/api/products' with your actual API endpoint
       setRows(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);

@@ -43,7 +43,7 @@ function DeleteInventory() {
         const trimmedProductName = searchProductName.trim();
         const trimmedBatchNo = searchBatchNo.trim();
 
-        axios.get(`http://localhost:8090/inventory?productName=${trimmedProductName}&batchNo=${trimmedBatchNo}`)
+        axios.get(`http://52.66.201.221:8090/inventory?productName=${trimmedProductName}&batchNo=${trimmedBatchNo}`)
             .then(response => {
                 console.log('Search results:', response.data);
                 setInventoryData(response.data);
@@ -58,7 +58,7 @@ function DeleteInventory() {
 
     const handleDeleteInventory = () => {
         if (inventoryData) {
-            axios.delete(`http://localhost:8090/inventory`, {
+            axios.delete(`http://52.66.201.221:8090/inventory`, {
                 params: {
                     productName: inventoryData.productName,
                     batchNo: inventoryData.batchNumber

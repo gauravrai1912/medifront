@@ -34,7 +34,7 @@ function EditOrderDetails() {
 
   const handleSearchOrder = async () => {
     try {
-      const response = await axios.get(`http://localhost:8090/order-details/getDetails?orderId=${orderId}&productName=${productName}`);
+      const response = await axios.get(`http://52.66.201.221:8090/order-details/getDetails?orderId=${orderId}&productName=${productName}`);
       const foundProduct = response.data;
       console.log(foundProduct);
       if (foundProduct) {
@@ -58,7 +58,7 @@ function EditOrderDetails() {
 
   const handleEditInventory = async () => {
     try {
-      await axios.put('http://localhost:8090/order-details', {
+      await axios.put('http://52.66.201.221:8090/order-details', {
         orderId: editableData.orderId,
         productName: editableData.productName,
         quantityOrdered: editableData.quantityOrdered,

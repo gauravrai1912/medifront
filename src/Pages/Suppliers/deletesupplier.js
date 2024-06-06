@@ -33,7 +33,7 @@ function DeleteSupplier() {
   };
 
   const handleSearchSupplier = () => {
-    axios.get(`http://localhost:8090/suppliers/getsupplierbyname?name=${searchText}`)
+    axios.get(`http://52.66.201.221:8090/suppliers/getsupplierbyname?name=${searchText}`)
       .then(response => {
         setSelectedSupplier(response.data);
         setMessage('');
@@ -46,7 +46,7 @@ function DeleteSupplier() {
 
   const handleDeleteSupplier = () => {
     if (selectedSupplier) {
-      axios.delete(`http://localhost:8090/suppliers/deletesupplier?name=${selectedSupplier.supplierName}`)
+      axios.delete(`http://52.66.201.221:8090/suppliers/deletesupplier?name=${selectedSupplier.supplierName}`)
         .then(response => {
           console.log('Supplier deleted:', response.data);
           setSnackbarSeverity('success');

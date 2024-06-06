@@ -19,7 +19,7 @@ function DeleteOrder() {
 
   const handleSearchOrder = async () => {
     try {
-      const response = await axios.get(`http://localhost:8090/orders/${orderId}`);
+      const response = await axios.get(`http://52.66.201.221:8090/orders/${orderId}`);
       const foundOrder = response.data;
       console.log('Order details:', foundOrder);
       setOrderDetails(foundOrder);
@@ -37,7 +37,7 @@ function DeleteOrder() {
   const handleDeleteOrderDetails = async () => {
     try {
       // Make a request to delete order details using the provided API
-      await axios.delete(`http://localhost:8090/orders/${orderId}`);
+      await axios.delete(`http://52.66.201.221:8090/orders/${orderId}`);
       setSnackbarSeverity('success');
       setSnackbarMessage('Order Details Deleted Successfully');
       setSnackbarOpen(true);

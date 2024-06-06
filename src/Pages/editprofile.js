@@ -18,7 +18,7 @@ const EditProfile = () => {
                 const email = decodedToken.sub;
                 console.log(email);
 
-                const response = await axios.get(`http://localhost:8090/api/v1/auth/getuserinfo`,{
+                const response = await axios.get(`http://52.66.201.221:8090/api/v1/auth/getuserinfo`,{
                 headers : {
                     email: email,
                     token: token
@@ -43,7 +43,7 @@ const EditProfile = () => {
             const email = decodedToken.sub;
             console.log(email);
             console.log(phoneNumber, firstName, lastName);
-            await axios.put(`http://localhost:8090/api/v1/auth/updateProfile?email=${email}`, { phoneNumber, firstName, lastName });
+            await axios.put(`http://52.66.201.221:8090/api/v1/auth/updateProfile?email=${email}`, { phoneNumber, firstName, lastName });
             alert('Profile updated successfully!');
         } catch (error) {
             console.error('Error updating user profile:', error);

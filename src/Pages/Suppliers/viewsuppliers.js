@@ -26,7 +26,7 @@ const ViewSupplierPage = () => {
   const [suppliers, setSuppliers] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8090/suppliers/getallsuppliers')
+    axios.get('http://52.66.201.221:8090/suppliers/getallsuppliers')
       .then(response => {
         setSuppliers(response.data); 
       })

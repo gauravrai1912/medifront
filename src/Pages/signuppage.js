@@ -36,7 +36,7 @@ function SignUpDialog() {
     }
 
     try {
-      const response = await axios.post('http://localhost:8090/api/v1/auth/signup', formData);
+      const response = await axios.post('http://52.66.201.221:8090/api/v1/auth/signup', formData);
       console.log(response.data); // Handle success response
 
       // Redirect to dashboard upon successful signup

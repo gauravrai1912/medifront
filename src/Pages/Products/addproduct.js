@@ -57,7 +57,7 @@ function AddProduct() {
       reorderLevel: parseInt(reorderLevel)
     };
 
-    axios.post('http://localhost:8090/products', productData)
+    axios.post('http://52.66.201.221:8090/products', productData)
       .then(response => {
         console.log('Product added successfully:', response.data);
         // Reset form fields after adding product

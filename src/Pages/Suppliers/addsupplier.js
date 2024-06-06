@@ -46,7 +46,7 @@ function AddSupplier() {
       return;
     }
 
-    axios.post('http://localhost:8090/suppliers', {
+    axios.post('http://52.66.201.221:8090/suppliers', {
       supplierName,
       contactNumber,
       email,

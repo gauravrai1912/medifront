@@ -37,7 +37,7 @@ function AddInventory() {
       expirationDate,
     };
 
-    axios.post('http://localhost:8090/inventory', inventoryData)
+    axios.post('http://52.66.201.221:8090/inventory', inventoryData)
       .then(response => {
         console.log('Inventory added successfully:', response.data);
         // Reset form fields after adding inventory
