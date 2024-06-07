@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
 import axios from 'axios';
+import config from '../../config';
 
 function EditOrderDetails() {
   const [orderId, setOrderId] = useState('');
@@ -17,6 +18,7 @@ function EditOrderDetails() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState('');
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const apiUrl = config.apiUrl;
 
   const handleSearchChange = (event) => {
     setOrderId(event.target.value);
@@ -34,7 +36,7 @@ function EditOrderDetails() {
 
   const handleSearchOrder = async () => {
     try {
-      const response = await axios.get(`http://52.66.201.221:8090/order-details/getDetails?orderId=${orderId}&productName=${productName}`);
+      const response = await axios.get(`${apiUrl}/order-details/getDetails?orderId=${orderId}&productName=${productName}`);
       const foundProduct = response.data;
       console.log(foundProduct);
       if (foundProduct) {
@@ -58,7 +60,7 @@ function EditOrderDetails() {
 
   const handleEditInventory = async () => {
     try {
-      await axios.put('http://52.66.201.221:8090/order-details', {
+      await axios.put(`${apiUrl}/order-details`, {
         orderId: editableData.orderId,
         productName: editableData.productName,
         quantityOrdered: editableData.quantityOrdered,

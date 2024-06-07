@@ -7,6 +7,7 @@ import Alert from '@mui/material/Alert';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
 import axios from 'axios';
+import config from '../../config';
 
 function AddProduct() {
   const [supplierName, setSupplierName] = useState('');
@@ -18,6 +19,7 @@ function AddProduct() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState('');
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const apiUrl = config.apiUrl;
 
   const handleSupplierNameChange = (event) => {
     setSupplierName(event.target.value);
@@ -57,7 +59,7 @@ function AddProduct() {
       reorderLevel: parseInt(reorderLevel)
     };
 
-    axios.post('http://52.66.201.221:8090/products', productData)
+    axios.post(`${apiUrl}/products`, productData)
       .then(response => {
         console.log('Product added successfully:', response.data);
         // Reset form fields after adding product

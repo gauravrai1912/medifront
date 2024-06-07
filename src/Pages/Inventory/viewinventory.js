@@ -11,6 +11,7 @@ import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
+import config from '../../config';
 
 const columns = [
   { id: 'productName', label: 'Product Name', minWidth: 100 },
@@ -22,6 +23,7 @@ const columns = [
   { id: 'quantity', label: 'Quantity', minWidth: 100 },
   { id: 'expirationDate', label: 'Expiration Date', minWidth: 150 },
 ];
+const apiUrl = config.apiUrl;
 
 function StickyHeadTable() {
   const [rows, setRows] = useState([]);
@@ -32,7 +34,7 @@ function StickyHeadTable() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://52.66.201.221:8090/inventory/getall'); // Replace with your API endpoint
+        const response = await axios.get(`${apiUrl}/inventory/getall`); // Replace with your API endpoint
         setRows(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);

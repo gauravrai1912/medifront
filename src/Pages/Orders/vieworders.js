@@ -11,16 +11,18 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import config from '../../config';
 
 function ViewOrderDetails() {
   const [orderId, setOrderId] = React.useState('');
   const [orderDetails, setOrderDetails] = React.useState([]);
   const [errorMessage, setErrorMessage] = React.useState('');
+  const apiUrl = config.apiUrl;
 
   const handleSearchOrder = async () => {
     if (orderId) {
       try {
-        const response = await axios.get(`http://52.66.201.221:8090/order-details/${orderId}`);
+        const response = await axios.get(`${apiUrl}/order-details/${orderId}`);
         setOrderDetails(response.data);
         console.log('Order details:', response.data);
         setErrorMessage('');

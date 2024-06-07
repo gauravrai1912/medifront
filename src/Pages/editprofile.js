@@ -4,11 +4,16 @@ import Footer from '../Components/footer';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { jwtDecode } from "jwt-decode";
+import config from '../config';
+
+
+
 
 const EditProfile = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -16,9 +21,10 @@ const EditProfile = () => {
                 const token = Cookies.get('jwt_token');
                 const decodedToken = jwtDecode(token);
                 const email = decodedToken.sub;
+                const apiUrl = config.apiUrl;
                 console.log(email);
 
-                const response = await axios.get(`http://52.66.201.221:8090/api/v1/auth/getuserinfo`,{
+                const response = await axios.get(`${apiUrl}/api/v1/auth/getuserinfo`,{
                 headers : {
                     email: email,
                     token: token
@@ -41,9 +47,10 @@ const EditProfile = () => {
             const token = Cookies.get('jwt_token');
             const decodedToken = jwtDecode(token);
             const email = decodedToken.sub;
+            const apiUrl = config.apiUrl;
             console.log(email);
             console.log(phoneNumber, firstName, lastName);
-            await axios.put(`http://52.66.201.221:8090/api/v1/auth/updateProfile?email=${email}`, { phoneNumber, firstName, lastName });
+            await axios.put(`${apiUrl}/api/v1/auth/updateProfile?email=${email}`, { phoneNumber, firstName, lastName });
             alert('Profile updated successfully!');
         } catch (error) {
             console.error('Error updating user profile:', error);

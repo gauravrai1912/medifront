@@ -5,12 +5,14 @@ import Footer from '../Components/footer';
 import Navbar from '../Components/navbar';
 import Cookies from 'js-cookie';
 import { jwtDecode } from "jwt-decode";
+import config from '../config';
 
 const UpdatePassword = () => {
     const [password, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const apiUrl = config.apiUrl;
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
@@ -25,7 +27,7 @@ const UpdatePassword = () => {
             const token = Cookies.get('jwt_token');
             const decodedToken = jwtDecode(token);
             const email = decodedToken.sub;
-            const response = await axios.post('http://52.66.201.221:8090/api/v1/auth/changePassword', { email, password, newPassword });
+            const response = await axios.post(`${apiUrl}/api/v1/auth/changePassword`, { email, password, newPassword });
             if (response.status === 200) {
                 alert('Password updated successfully.');
                 navigate('/home');

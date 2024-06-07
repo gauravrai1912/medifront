@@ -14,7 +14,8 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
-import axios from 'axios'; // Import axios for making HTTP requests
+import axios from 'axios'; 
+import config from '../../config';
 
 function EditSupplier() {
     const [searchText, setSearchText] = React.useState('');
@@ -24,6 +25,7 @@ function EditSupplier() {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarSeverity, setSnackbarSeverity] = useState('');
     const [snackbarMessage, setSnackbarMessage] = useState('');
+    const apiUrl = config.apiUrl;
   
 
     const handleSearchChange = (event) => {
@@ -34,7 +36,7 @@ function EditSupplier() {
     const handleSearchSupplier = () => {
         const trimmedSearchText = searchText.trim(); // Trim extra spaces
         // Replace the below block with actual API call to search for a supplier
-        axios.get(`http://52.66.201.221:8090/suppliers/getsupplierbyname?name=${trimmedSearchText}`)
+        axios.get(`${apiUrl}/suppliers/getsupplierbyname?name=${trimmedSearchText}`)
             .then(response => {
                 setSelectedSupplier(response.data);
                 setShowEditFields(false);
@@ -55,7 +57,7 @@ function EditSupplier() {
       };
 
     const handleEditSupplier = () => {
-        axios.put(`http://52.66.201.221:8090/suppliers/updatesupplier?name=${selectedSupplier.supplierName}`, selectedSupplier)
+        axios.put(`${apiUrl}/suppliers/updatesupplier?name=${selectedSupplier.supplierName}`, selectedSupplier)
             .then(response => {
                 console.log('Editing supplier:', response.data);
                 setMessage('Supplier Edited Successfully');

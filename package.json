@@ -47,6 +47,10 @@
       "last 1 safari version"
     ]
   },
+
+  "config": {
+    "REACT_APP_API_BASE_URL": "http://172.18.5.2:8090"
+  },
   "devDependencies": {
     "tailwindcss": "^3.4.3"
   }

@@ -11,6 +11,7 @@ import TextField from '@mui/material/TextField';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
 import axios from 'axios';
+import config from '../../config';
 
 const columns = [
   { id: 'supplierName', label: 'Supplier Name', minWidth: 170 },
@@ -18,6 +19,7 @@ const columns = [
   { id: 'email', label: 'Email', minWidth: 200 },
   { id: 'address', label: 'Address', minWidth: 120 },
 ];
+const apiUrl = config.apiUrl;
 
 const ViewSupplierPage = () => {
   const [page, setPage] = useState(0);
@@ -26,7 +28,7 @@ const ViewSupplierPage = () => {
   const [suppliers, setSuppliers] = useState([]);
 
   useEffect(() => {
-    axios.get('http://52.66.201.221:8090/suppliers/getallsuppliers')
+    axios.get(`${apiUrl}/suppliers/getallsuppliers`)
       .then(response => {
         setSuppliers(response.data); 
       })

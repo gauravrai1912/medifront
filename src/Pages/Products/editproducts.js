@@ -15,6 +15,7 @@ import Typography from '@mui/material/Typography';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
 import axios from 'axios';
+import config from '../../config';
 
 function EditProduct() {
     const [searchText, setSearchText] = React.useState('');
@@ -24,6 +25,7 @@ function EditProduct() {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarSeverity, setSnackbarSeverity] = useState('');
     const [snackbarMessage, setSnackbarMessage] = useState('');
+    const apiUrl = config.apiUrl;
   
 
     const handleSearchChange = (event) => {
@@ -33,7 +35,7 @@ function EditProduct() {
 
     const handleSearchProduct = () => {
         const trimmedSearchText = searchText.trim();
-        axios.get(`http://52.66.201.221:8090/products/getproductbyname?name=${trimmedSearchText}`)
+        axios.get(`${apiUrl}/products/getproductbyname?name=${trimmedSearchText}`)
             .then(response => {
                 const foundProduct = response.data;
                 if (foundProduct) {
@@ -71,7 +73,7 @@ function EditProduct() {
         };
     
         // Send the data to the backend API using Axios
-        axios.put(`http://52.66.201.221:8090/products/updateproduct?name=${selectedProduct.productName}`, editedProductData)
+        axios.put(`${apiUrl}/products/updateproduct?name=${selectedProduct.productName}`, editedProductData)
             .then(response => {
                 // Handle successful response from the backend
                 console.log('Product edited successfully:', response.data);

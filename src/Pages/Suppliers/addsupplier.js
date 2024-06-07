@@ -7,6 +7,7 @@ import Alert from '@mui/material/Alert';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
 import axios from 'axios'; 
+import config from '../../config';
 
 function AddSupplier() {
   const [supplierName, setSupplierName] = useState('');
@@ -16,6 +17,7 @@ function AddSupplier() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState('');
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const apiUrl = config.apiUrl;
 
   const handleSupplierNameChange = (event) => {
     setSupplierName(event.target.value);
@@ -46,7 +48,7 @@ function AddSupplier() {
       return;
     }
 
-    axios.post('http://52.66.201.221:8090/suppliers', {
+    axios.post(`${apiUrl}/suppliers`, {
       supplierName,
       contactNumber,
       email,

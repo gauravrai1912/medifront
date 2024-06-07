@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from 'js-cookie';
+import config from "../config";
 
 function Login() {
   const navigate = useNavigate();
@@ -11,9 +12,12 @@ function Login() {
     event.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+    
 
+    const apiUrl = config.apiUrl;
+    
     // Assuming you use axios for making API calls
-    axios.post('http://52.66.201.221:8090/api/v1/auth/login', { email, password })
+    axios.post(`${apiUrl}/api/v1/auth/login`, { email, password })
       .then(response => {
         const { statusCode, responseMessage, token } = response.data;
         if (statusCode === 200) {

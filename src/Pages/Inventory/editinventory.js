@@ -8,6 +8,7 @@ import Alert from '@mui/material/Alert';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
 import axios from 'axios';
+import config from '../../config';
 
 function EditInventory() {
     const [searchProductName, setSearchProductName] = React.useState('');
@@ -17,6 +18,7 @@ function EditInventory() {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarSeverity, setSnackbarSeverity] = useState('');
     const [snackbarMessage, setSnackbarMessage] = useState('');
+    const apiUrl = config.apiUrl;
 
     const handleSearchChange = (event) => {
         setSearchProductName(event.target.value);
@@ -36,7 +38,7 @@ function EditInventory() {
         const trimmedProductName = searchProductName.trim();
         const trimmedBatchNo = searchBatchNo.trim();
         console.log('Searching inventory with:', { trimmedProductName, trimmedBatchNo }); // Debugging log
-        axios.get(`http://52.66.201.221:8090/inventory?productName=${trimmedProductName}&batchNo=${trimmedBatchNo}`)
+        axios.get(`${apiUrl}/inventory?productName=${trimmedProductName}&batchNo=${trimmedBatchNo}`)
             .then(response => {
                 const foundInventory = response.data;
                 console.log('Search results:', foundInventory); // Debugging log
@@ -59,7 +61,7 @@ function EditInventory() {
     };
 
     const handleEditInventory = () => {
-        axios.put(`http://52.66.201.221:8090/inventory?productName=${editableData.productName}&batchNo=${editableData.batchNumber}`, editableData)
+        axios.put(`${apiUrl}/inventory?productName=${editableData.productName}&batchNo=${editableData.batchNumber}`, editableData)
             .then(response => {
                 setSnackbarSeverity('success');
                 setSnackbarMessage('Inventory Edited Successfully');

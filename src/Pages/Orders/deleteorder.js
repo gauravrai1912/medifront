@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
 import axios from 'axios';
+import config from '../../config';
 
 function DeleteOrder() {
   const [orderId, setOrderId] = useState('');
@@ -16,10 +17,11 @@ function DeleteOrder() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState('');
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const apiUrl = config.apiUrl;
 
   const handleSearchOrder = async () => {
     try {
-      const response = await axios.get(`http://52.66.201.221:8090/orders/${orderId}`);
+      const response = await axios.get(`${apiUrl}/orders/${orderId}`);
       const foundOrder = response.data;
       console.log('Order details:', foundOrder);
       setOrderDetails(foundOrder);
@@ -37,7 +39,7 @@ function DeleteOrder() {
   const handleDeleteOrderDetails = async () => {
     try {
       // Make a request to delete order details using the provided API
-      await axios.delete(`http://52.66.201.221:8090/orders/${orderId}`);
+      await axios.delete(`${apiUrl}/orders/${orderId}`);
       setSnackbarSeverity('success');
       setSnackbarMessage('Order Details Deleted Successfully');
       setSnackbarOpen(true);

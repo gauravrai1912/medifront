@@ -13,6 +13,7 @@ import Alert from '@mui/material/Alert';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
 import axios from 'axios'; 
+import config from '../../config';
 
 function DeleteSupplier() {
   const [searchText, setSearchText] = React.useState('');
@@ -21,6 +22,7 @@ function DeleteSupplier() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState('');
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const apiUrl = config.apiUrl;
 
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
@@ -33,7 +35,7 @@ function DeleteSupplier() {
   };
 
   const handleSearchSupplier = () => {
-    axios.get(`http://52.66.201.221:8090/suppliers/getsupplierbyname?name=${searchText}`)
+    axios.get(`${apiUrl}/suppliers/getsupplierbyname?name=${searchText}`)
       .then(response => {
         setSelectedSupplier(response.data);
         setMessage('');
@@ -46,7 +48,7 @@ function DeleteSupplier() {
 
   const handleDeleteSupplier = () => {
     if (selectedSupplier) {
-      axios.delete(`http://52.66.201.221:8090/suppliers/deletesupplier?name=${selectedSupplier.supplierName}`)
+      axios.delete(`${apiUrl}/suppliers/deletesupplier?name=${selectedSupplier.supplierName}`)
         .then(response => {
           console.log('Supplier deleted:', response.data);
           setSnackbarSeverity('success');

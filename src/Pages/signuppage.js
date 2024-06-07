@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Snackbar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import config from '../config';
 
 function SignUpDialog() {
   const [formData, setFormData] = useState({
@@ -17,6 +18,7 @@ function SignUpDialog() {
 
   const [errorMessage, setErrorMessage] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const apiUrl = config.apiUrl;
 
   const navigate = useNavigate(); // Get navigate function for navigation
 
@@ -36,7 +38,7 @@ function SignUpDialog() {
     }
 
     try {
-      const response = await axios.post('http://52.66.201.221:8090/api/v1/auth/signup', formData);
+      const response = await axios.post(`${apiUrl}/api/v1/auth/signup`, formData);
       console.log(response.data); // Handle success response
 
       // Redirect to dashboard upon successful signup

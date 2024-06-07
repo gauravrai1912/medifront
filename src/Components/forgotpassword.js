@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import config from "../config";
 
 function ForgotPasswordDialog() {
   const [showOTP, setShowOTP] = useState(false);
@@ -9,14 +10,17 @@ function ForgotPasswordDialog() {
   const [otpValues, setOTPValues] = useState(Array(6).fill(""));
   const [timer, setTimer] = useState(10);
   const [showResend, setShowResend] = useState(false);
+  const apiUrl = config.apiUrl;
   
 
   const navigate = useNavigate();
 
   const handleChange = async (event) => {
+
+   
     event.preventDefault();
     try {
-      const response = await axios.post("http://52.66.201.221:8090/api/v1/auth/forgotPassword", { email });
+      const response = await axios.post(`${apiUrl}/api/v1/auth/forgotPassword`, { email });
       if (response.status === 200) {
         // Show OTP dialog if the request is successful
         setShowOTP(true);
@@ -34,7 +38,7 @@ function ForgotPasswordDialog() {
   const handleOTPValidation = () => {
     const otp = otpValues.join("");
     axios
-      .post("http://52.66.201.221:8090/api/v1/auth/validateOtp", {
+      .post(`${apiUrl}/api/v1/auth/validateOtp`, {
         email: email,
         otp: otp
       })

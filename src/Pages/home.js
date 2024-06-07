@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../Components/navbar';
 import Footer from '../Components/footer';
 import axios from 'axios';
+import config from '../config';
 
 function Home() {
     const [inventoryData, setInventoryData] = useState({
@@ -10,11 +11,13 @@ function Home() {
         productsExpiringWithinAWeek: 0
     });
     const [message, setMessage] = useState('');
+    
 
     useEffect(() => {
         const fetchInventoryData = async () => {
+            const apiUrl = config.apiUrl;
             try {
-                const response = await axios.get('http://52.66.201.221:8090/inventory/summary');
+                const response = await axios.get(`${apiUrl}/inventory/summary`);
                 setInventoryData(response.data);
                 setMessage('');
             } catch (error) {

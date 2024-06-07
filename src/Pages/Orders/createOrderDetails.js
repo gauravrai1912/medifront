@@ -8,6 +8,7 @@ import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import config from '../../config';
 
 function CreateOrderDetails() {
   const [orderId, setOrderId] = useState('');
@@ -17,6 +18,7 @@ function CreateOrderDetails() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState('');
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const apiUrl = config.apiUrl;
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -35,7 +37,7 @@ function CreateOrderDetails() {
     if (orderId && productName && quantityOrdered && totalPrice) {
       try {
         const orderDetails = { orderId, productName, quantityOrdered, totalPrice };
-        await axios.post('http://52.66.201.221:8090/order-details', orderDetails);
+        await axios.post(`${apiUrl}/order-details`, orderDetails);
         
         setSnackbarSeverity('success');
         setSnackbarMessage('Order Details Added Successfully');

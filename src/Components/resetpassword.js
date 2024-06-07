@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import config from "../config";
 
 function ResetPassword() {
     const [newPassword, setNewPassword] = useState("");
@@ -9,6 +10,7 @@ function ResetPassword() {
     const navigate = useNavigate();
     const location = useLocation();
     const email = location.state?.email || "";
+    const apiUrl = config.apiUrl;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -18,7 +20,7 @@ function ResetPassword() {
     }
     console.log(email, newPassword);
     try {
-      const response = await axios.put("http://52.66.201.221:8090/api/v1/auth/resetPassword", {
+      const response = await axios.put(`${apiUrl}/api/v1/auth/resetPassword`, {
         email: email,
         newPassword: newPassword
       });

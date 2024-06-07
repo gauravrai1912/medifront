@@ -13,6 +13,7 @@ import Alert from '@mui/material/Alert';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
 import axios from 'axios'; 
+import config from '../../config';
 
 function DeleteProduct() {
   const [searchText, setSearchText] = React.useState('');
@@ -21,6 +22,7 @@ function DeleteProduct() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState('');
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const apiUrl = config.apiUrl;
 
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
@@ -33,7 +35,7 @@ function DeleteProduct() {
   };
 
   const handleSearchProduct = () => {
-    axios.get(`http://52.66.201.221:8090/products/getproductbyname?name=${searchText}`)
+    axios.get(`${apiUrl}/products/getproductbyname?name=${searchText}`)
       .then(response => {
         setSelectedProduct(response.data);
         setMessage('');
@@ -47,7 +49,7 @@ function DeleteProduct() {
   const handleDeleteProduct = () => {
     if (selectedProduct) {
       // Send a DELETE request to delete the selected product
-      axios.delete(`http://52.66.201.221:8090/products/deleteproduct?name=${selectedProduct.productName}`)
+      axios.delete(`${apiUrl}/products/deleteproduct?name=${selectedProduct.productName}`)
         .then(response => {
           console.log('Product deleted:', response.data);
           setSnackbarSeverity('success');

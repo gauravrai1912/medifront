@@ -6,6 +6,7 @@ import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import config from '../../config';
 
 
 function CreateOrders() {
@@ -13,7 +14,7 @@ function CreateOrders() {
   const [orderDate, setOrderDate] = React.useState('');
   const [pharmacistId, setPharmacistId] = React.useState('');
   const [supplierName, setSupplierId] = React.useState('');
-
+  const apiUrl = config.apiUrl;
   const navigate = useNavigate();
 
   const handleProceed = async () => {
@@ -22,7 +23,7 @@ function CreateOrders() {
       try {
         // Make API call to save the order
         const order = { orderId, orderDate, pharmacistId, supplierName };
-        await axios.post('http://52.66.201.221:8090/orders', order);
+        await axios.post(`${apiUrl}/orders`, order);
         
         // Navigate to Order Details page if the order is successfully saved
         navigate('/orders/order-details', { state: { orderId } });

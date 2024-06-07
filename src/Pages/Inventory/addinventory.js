@@ -7,6 +7,7 @@ import Alert from '@mui/material/Alert';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
 import axios from 'axios';
+import config from '../../config';
 
 function AddInventory() {
   const [productName, setProductName] = useState('');
@@ -20,6 +21,7 @@ function AddInventory() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState('');
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const apiUrl = config.apiUrl;
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
@@ -37,7 +39,7 @@ function AddInventory() {
       expirationDate,
     };
 
-    axios.post('http://52.66.201.221:8090/inventory', inventoryData)
+    axios.post(`${apiUrl}/inventory`, inventoryData)
       .then(response => {
         console.log('Inventory added successfully:', response.data);
         // Reset form fields after adding inventory

@@ -13,6 +13,7 @@ import Alert from '@mui/material/Alert';
 import Footer from '../../Components/footer';
 import Navbar from '../../Components/navbar';
 import axios from 'axios';
+import config from '../../config';
 
 function DeleteInventory() {
     const [searchProductName, setSearchProductName] = React.useState('');
@@ -22,6 +23,7 @@ function DeleteInventory() {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarSeverity, setSnackbarSeverity] = useState('');
     const [snackbarMessage, setSnackbarMessage] = useState('');
+    const apiUrl = config.apiUrl;
 
     const handleSearchProductNameChange = (event) => {
         setSearchProductName(event.target.value);
@@ -43,7 +45,7 @@ function DeleteInventory() {
         const trimmedProductName = searchProductName.trim();
         const trimmedBatchNo = searchBatchNo.trim();
 
-        axios.get(`http://52.66.201.221:8090/inventory?productName=${trimmedProductName}&batchNo=${trimmedBatchNo}`)
+        axios.get(`${apiUrl}/inventory?productName=${trimmedProductName}&batchNo=${trimmedBatchNo}`)
             .then(response => {
                 console.log('Search results:', response.data);
                 setInventoryData(response.data);
@@ -58,7 +60,7 @@ function DeleteInventory() {
 
     const handleDeleteInventory = () => {
         if (inventoryData) {
-            axios.delete(`http://52.66.201.221:8090/inventory`, {
+            axios.delete(`${apiUrl}/inventory`, {
                 params: {
                     productName: inventoryData.productName,
                     batchNo: inventoryData.batchNumber
