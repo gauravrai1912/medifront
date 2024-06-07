@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../Components/navbar';
 import Footer from '../Components/footer';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { jwtDecode } from "jwt-decode";
@@ -13,6 +15,13 @@ const EditProfile = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarSeverity, setSnackbarSeverity] = useState('');
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+      };
     
 
     useEffect(() => {
@@ -35,7 +44,9 @@ const EditProfile = () => {
                 setFirstName(data.firstName);
                 setLastName(data.lastName);
             } catch (error) {
-                console.error('Error fetching user profile:', error);
+                setSnackbarSeverity('error');
+                setSnackbarMessage('Error fetching user profile');
+                setSnackbarOpen(true);
             }
         };
 
@@ -51,10 +62,13 @@ const EditProfile = () => {
             console.log(email);
             console.log(phoneNumber, firstName, lastName);
             await axios.put(`${apiUrl}/api/v1/auth/updateProfile?email=${email}`, { phoneNumber, firstName, lastName });
-            alert('Profile updated successfully!');
+            setSnackbarSeverity('success');
+            setSnackbarMessage('Profile updated successfully!');
+            setSnackbarOpen(true);
         } catch (error) {
-            console.error('Error updating user profile:', error);
-            alert('Failed to update profile. Please try again.');
+            setSnackbarSeverity('error');
+            setSnackbarMessage('Error updating user profile');
+            setSnackbarOpen(true);
         }
     };
 
@@ -98,6 +112,16 @@ const EditProfile = () => {
                 </form>
             </div>
             <Footer />
+            <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
         </div>
     );
 };

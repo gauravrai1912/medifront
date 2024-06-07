@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../Components/footer';
 import Navbar from '../Components/navbar';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import Cookies from 'js-cookie';
 import { jwtDecode } from "jwt-decode";
 import config from '../config';
@@ -12,8 +14,15 @@ const UpdatePassword = () => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarSeverity, setSnackbarSeverity] = useState('');
+    const [snackbarMessage, setSnackbarMessage] = useState('');
     const apiUrl = config.apiUrl;
     const navigate = useNavigate();
+
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+      };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -29,14 +38,20 @@ const UpdatePassword = () => {
             const email = decodedToken.sub;
             const response = await axios.post(`${apiUrl}/api/v1/auth/changePassword`, { email, password, newPassword });
             if (response.status === 200) {
-                alert('Password updated successfully.');
+                setSnackbarSeverity('success');
+                setSnackbarMessage('Password Updated Successfully');
+                setSnackbarOpen(true);
                 navigate('/home');
             } else {
-                setErrorMessage('Failed to update password. Please try again.');
+                setSnackbarSeverity('error');
+                setSnackbarMessage('Failed to update password. Please try again.');
+                setSnackbarOpen(true);
             }
         } catch (error) {
             console.error('Error updating password:', error);
-            setErrorMessage('An error occurred while updating password. Please try again later.');
+            setSnackbarSeverity('error');
+            setSnackbarMessage('Failed to update password. Please try again.');
+            setSnackbarOpen(true);
         }
     };
 
@@ -89,6 +104,16 @@ const UpdatePassword = () => {
                 </form>
             </div>
             <Footer />
+            <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
         </div>
     );
 };
